@@ -2,12 +2,12 @@ import os
 import unittest
 import h5py
 import numpy as np
-from options import WavelocOptions
-from locations_trigger import do_locations_trigger_setup_and_run, \
+from .options import WavelocOptions
+from .locations_trigger import do_locations_trigger_setup_and_run, \
     trigger_locations_inner, read_locs_from_file
-from locations_prob import do_locations_prob_setup_and_run, \
+from .locations_prob import do_locations_prob_setup_and_run, \
     read_prob_locs_from_file
-from integrate4D import compute_integral4D, compute_expected_coordinates4D
+from .integrate4D import compute_integral4D, compute_expected_coordinates4D
 
 
 def suite():
@@ -50,7 +50,7 @@ class TriggeringTests(unittest.TestCase):
 
     def test_smoothing(self):
 
-        from filters import smooth
+        from .filters import smooth
 
         x = np.arange(100)
         max_val = 100.*np.exp(-(x-50.)*(x-50.)/(10.*10.))+np.random.rand(100)
@@ -172,7 +172,7 @@ class LocationTests(unittest.TestCase):
         locs = read_locs_from_file(loc_fname)
 
         self.assertEqual(len(locs), len(exp_locs))
-        for i in xrange(len(locs)):
+        for i in range(len(locs)):
             loc = locs[i]
             exp_loc = exp_locs[i]
             self.assertGreater(loc['o_time'],
@@ -215,7 +215,7 @@ class LocationTests(unittest.TestCase):
         f_marginals = h5py.File(hdf5_fname, 'r')
         self.assertEqual(len(locs), len(prob_locs))
 
-        for i in xrange(len(locs)):
+        for i in range(len(locs)):
             loc = locs[i]
             prob_loc = prob_locs[i]
             self.assertGreater(prob_loc['o_time'],

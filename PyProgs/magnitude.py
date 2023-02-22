@@ -8,10 +8,10 @@ import numpy as np
 from obspy.xseed import Parser
 from obspy.signal import estimateMagnitude
 import matplotlib.pyplot as plt
-from OP_waveforms import Waveform
-from locations_trigger import read_locs_from_file, read_header_from_file, \
+from .OP_waveforms import Waveform
+from .locations_trigger import read_locs_from_file, read_header_from_file, \
     write_header_options
-from NllGridLib import read_stations_file
+from .NllGridLib import read_stations_file
 
 
 def read_paz(files):
@@ -192,7 +192,7 @@ def do_comp_mag(opdict):
 
     r = np.arange(-3, 3, 0.1)
     p, logN, i1, i2 = bvalue(mags, r)
-    print "b-value:", -p[0]
+    print("b-value:", -p[0])
 
     if opdict['verbose']:
         fig = plt.figure(figsize=(10, 5))

@@ -9,7 +9,7 @@ def suite():
 
 def setUpModule():
 
-  from make_SDS_data_links import make_SDS_data_links
+  from .make_SDS_data_links import make_SDS_data_links
 
   # get basic information
   base_path=os.getenv('WAVELOC_PATH')
@@ -56,8 +56,8 @@ class SetupTests(unittest.TestCase):
 
 if __name__ == '__main__':
 
-  import test_processing, test_migration, test_location, test_hdf5, test_nllstuff, test_correlation
-  import test_double_diff, test_clustering, test_kurtogram
+  from . import test_processing, test_migration, test_location, test_hdf5, test_nllstuff, test_correlation
+  from . import test_double_diff, test_clustering, test_kurtogram
   import logging
   logging.basicConfig(level=logging.INFO, format='%(levelname)s : %(asctime)s : %(message)s')
  

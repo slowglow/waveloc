@@ -99,7 +99,7 @@ else:
   time_grid.populate_from_time_grids(grid_filename_base,cha,out_path,load_buf=True)
 
 
-print "Getting Grid geometry"
+print("Getting Grid geometry")
 dummy_grid=QDGrid()
 dummy_grid.read_NLL_hdr_file(hdr_file)
 (nx,ny,nz)=(dummy_grid.nx, dummy_grid.ny, dummy_grid.nz)
@@ -139,7 +139,7 @@ for line in loc_lines:
 #for loc in locs[0:4]:
 for loc in locs:
 
-  print loc
+  print(loc)
 
   stack_time=loc[1]
   stack_time_err_left=loc[2]
@@ -206,7 +206,7 @@ for loc in locs:
 
   # create .png file using mayavi
   if options.run_mayavi:
-    print "Creating plot using mayavi"
+    print("Creating plot using mayavi")
     (x_data,y_data,z_data)=plot_slice_mayavi(grid_name, png_name, hypo_x, hypo_y, hypo_z, options.search_grid,max_stack_value)
   png=Image.open(png_name)
 
@@ -215,7 +215,7 @@ for loc in locs:
 
   n_traces=len(data_files)+1
 
-  print "Creating figure..."
+  print("Creating figure...")
 
   # create figure
 

@@ -63,7 +63,7 @@ proj_info['orig_lat'] = np.float(proj_line.split()[3])
 proj_info['orig_lon'] = np.float(proj_line.split()[5])
 proj_info['map_rot'] = np.float(proj_line.split()[7])
 
-print proj_info
+print(proj_info)
 
 
 event1ll=(44.9235 , 11.1418)
@@ -85,7 +85,7 @@ figdir=os.path.join(base_path,'out',wo.opdict['outdir'],'fig')
 griddir=os.path.join(base_path,'out',wo.opdict['outdir'],'grid')
 
 # compute all grids
-for evname,ev in events.iteritems():
+for evname,ev in events.items():
   for dep in depths:
     x,y=latlon2rect('TRANS_SIMPLE',ev[0],ev[1],proj_info)
     

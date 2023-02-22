@@ -8,7 +8,7 @@ processing on data contained in an SDS file structure.
 
 import os
 from obspy.core import utcdatetime
-from OP_waveforms import Waveform
+from .OP_waveforms import Waveform
 import logging
 
 

@@ -1,0 +1,2425 @@
+python 2to3.py -f all -f idioms -w D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc
+
+D:\minPORT\10_SW\PFC\DEV\WPy_3890\python-3.8.9.amd64\Tools\scripts>python 2to3.py -f all -f idioms -w D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc
+RefactoringTool: Skipping optional fixer: buffer
+RefactoringTool: Skipping optional fixer: set_literal
+RefactoringTool: Skipping optional fixer: ws_comma
+RefactoringTool: No changes to D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\setup.py
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\CZ_color.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\CZ_color.py     (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\CZ_color.py     (refactored)
+@@ -37,7 +37,7 @@
+
+     """
+
+-    tt = range(0, 105, 5)
++    tt = list(range(0, 105, 5))
+     liste = [dt-tt[i] for i in range(len(tt))]
+     ind1 = np.where(np.abs(liste) == np.min(np.abs(liste)))[0]
+     ind2 = ind1[0]
+@@ -58,7 +58,7 @@
+
+     """
+
+-    tt = range(1, 21, 1)
++    tt = list(range(1, 21, 1))
+     liste = [dt-tt[i] for i in range(len(tt))]
+     ind1 = np.where(np.abs(liste) == np.min(np.abs(liste)))[0]
+     ind2 = ind1[0]
+RefactoringTool: No changes to D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\NllGridLib.py
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\OP_waveforms.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\OP_waveforms.py (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\OP_waveforms.py (refactored)
+@@ -23,7 +23,7 @@
+
+ import matplotlib.pyplot as plt
+
+-from filters import sw_kurtosis1, smooth, rec_kurtosis_old
++from .filters import sw_kurtosis1, smooth, rec_kurtosis_old
+
+ from obspy.core import read, utcdatetime, stream, Stream
+ from obspy.signal import cosTaper, filter, trigger
+@@ -414,7 +414,7 @@
+         st.merge(method=1, fill_value=fill_value)
+         for tr in st:
+             tr.data = tr.data.astype('float32')
+-            tr.stats.mseed.encoding = u'FLOAT32'
++            tr.stats.mseed.encoding = 'FLOAT32'
+
+         st.write(filename, format)
+
+@@ -433,7 +433,7 @@
+
+         for tr in st:
+             tr.data = tr.data.astype('int32')
+-            tr.stats.mseed.encoding = u'INT32'
++            tr.stats.mseed.encoding = 'INT32'
+         self.stream.write(filename, format)
+
+     def rmean(self):
+@@ -963,7 +963,7 @@
+     if len(u) > 1:
+         logging.error('Sampling frequency differs between stations.  Fix this\
+                        before migrating.')
+-        for i in xrange(len(deltas)):
++        for i in range(len(deltas)):
+             logging.error('Delta %.4f for file %s' % (deltas[i], filenames[i]))
+         raise UserWarning
+
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\SDS_processing.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\SDS_processing.py       (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\SDS_processing.py       (refactored)
+@@ -8,7 +8,7 @@
+
+ import os
+ from obspy.core import utcdatetime
+-from OP_waveforms import Waveform
++from .OP_waveforms import Waveform
+ import logging
+
+
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\clustering.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\clustering.py   (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\clustering.py   (refactored)
+@@ -9,12 +9,12 @@
+ import glob
+ import matplotlib.pyplot as plt
+ import numpy as np
+-from CZ_color import CZ_Clust_2_color, CZ_W_2_color
+-from OP_waveforms import Waveform
++from .CZ_color import CZ_Clust_2_color, CZ_W_2_color
++from .OP_waveforms import Waveform
+ import logging
+-from correlation import BinaryFile
+-from locations_trigger import read_locs_from_file
+-from NllGridLib import read_stations_file
++from .correlation import BinaryFile
++from .locations_trigger import read_locs_from_file
++from .NllGridLib import read_stations_file
+
+
+ class Graph(object):
+@@ -228,11 +228,11 @@
+     """
+
+     nbsta = []
+-    for i in xrange(event):
++    for i in range(event):
+         liste = []
+-        for k in xrange(i):
++        for k in range(i):
+             liste.append(0)
+-        for j in xrange(i, event):
++        for j in range(i, event):
+             c = 0
+             if i != j:
+                 for name in sorted(coeff):
+@@ -316,7 +316,7 @@
+         ind_summit_first = 0
+         cluster_ind = 0
+         CLUSTER = {}
+-        while 1:
++        while True:
+             event_index_flagged = []
+             event_index_non_flagged_with_neighbours = []
+             ind_summit_first = ind_summit_first+1
+@@ -419,7 +419,7 @@
+                   color=(0.8, 0.8, 0.8))
+     mlab.title("threshold=%s,  nbmin=%s" % (threshold, nbmin), height=0.1,
+                size=0.35, color=(0, 0, 0))
+-    print nbsta
++    print(nbsta)
+     for ind_I in range(len(nbsta)):
+         for ind_J in range(ind_I+1, len(nbsta)):
+             W_IJ = nbsta[ind_I, ind_J]
+@@ -476,10 +476,10 @@
+
+     # INPUT PARAMETERS
+     nbmin = int(opdict['nbsta'])
+-    if nbmin > len(coeff.keys()):
++    if nbmin > len(list(coeff.keys())):
+         raise Exception('the minimum number of stations cannot be > to the\
+                          number of stations !!')
+-    event = len(coeff.values()[0])
++    event = len(list(coeff.values())[0])
+     tplot = float(opdict['clus'])  # threshold for which we save and plot
+     cluster_file = "%s/cluster-%s-%s" % (locdir, str(tplot), str(nbmin))
+
+@@ -493,14 +493,14 @@
+
+         if threshold == tplot:
+
+-            print "----------------------------------------------"
+-            print "THRESHOLD : ", threshold, " # STATIONS : ", nbmin
+-            print "# CLUSTERS : ", len(CLUSTER)
+-            print CLUSTER
++            print("----------------------------------------------")
++            print("THRESHOLD : ", threshold, " # STATIONS : ", nbmin)
++            print("# CLUSTERS : ", len(CLUSTER))
++            print(CLUSTER)
+
+             c = BinaryFile(cluster_file)
+             c.write_binary_file(CLUSTER)
+-            print "Written in %s" % cluster_file
++            print("Written in %s" % cluster_file)
+
+             if verbose:  # PLOT
+                 # Read location file
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\correlation.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\correlation.py  (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\correlation.py  (refactored)
+@@ -7,12 +7,12 @@
+ import os
+ import glob
+ import time
+-import cPickle
++import pickle
+ import logging
+ import matplotlib.pyplot as plt
+ import numpy as np
+-from OP_waveforms import Waveform
+-from locations_trigger import read_locs_from_file
++from .OP_waveforms import Waveform
++from .locations_trigger import read_locs_from_file
+
+
+ class BinaryFile(object):
+@@ -36,7 +36,7 @@
+         :returns: data read from tile
+         """
+         with open(self.filename, 'rb') as test:
+-            my_depickler = cPickle.Unpickler(test)
++            my_depickler = pickle.Unpickler(test)
+             result = my_depickler.load()
+             test.close()
+         return result
+@@ -48,7 +48,7 @@
+         :param input: input data ready to be pickled
+         """
+         with open(self.filename, 'wb') as test:
+-            my_pickler = cPickle.Pickler(test)
++            my_pickler = pickle.Pickler(test)
+             my_pickler.dump(input)
+             test.close()
+
+@@ -193,7 +193,7 @@
+     """
+
+     s = np.cumsum(x)
+-    p = np.polyfit(range(len(x)), s, deg=1)
++    p = np.polyfit(list(range(len(x))), s, deg=1)
+     line = p[0]*np.arange(len(x))+p[1]
+     l = s-line
+
+@@ -440,9 +440,9 @@
+                             tau_f = tau
+                             plot_waveform(val1, val2, dt, [tau_t, tau_f],
+                                           event, compteur)
+-                            print "time: %.4f, %.4f" % (value, tau_t)
+-                            print "frequency : %.4f, %.4f" % (value, tau_f)
+-                            print "final delay : %.4f" % tau
++                            print("time: %.4f, %.4f" % (value, tau_t))
++                            print("frequency : %.4f, %.4f" % (value, tau_f))
++                            print("final delay : %.4f" % tau)
+                             plt.show()
+
+                     liste.append(round(value*10**2)/10**2)
+@@ -455,7 +455,7 @@
+             delay[name].append(list_tau)
+
+     # finished run, print timing info
+-    print "Elapsed time: ", time.time()-tref
++    print("Elapsed time: ", time.time()-tref)
+
+     # Save the results in 2 binary files
+     logging.info("Saving coeff and delay files")
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\double_diff.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\double_diff.py  (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\double_diff.py  (refactored)
+@@ -11,11 +11,11 @@
+
+ from obspy.core import utcdatetime
+
+-from locations_trigger import read_locs_from_file, read_header_from_file, \
++from .locations_trigger import read_locs_from_file, read_header_from_file, \
+     write_header_options
+-from correlation import BinaryFile
+-from NllGridLib import read_stations_file, read_hdr_file
+-from hdf5_grids import get_interpolated_time_grids
++from .correlation import BinaryFile
++from .NllGridLib import read_stations_file, read_hdr_file
++from .hdf5_grids import get_interpolated_time_grids
+
+
+ def traveltimes(x, y, z, t_orig, stations, time_grids):
+@@ -45,7 +45,7 @@
+     arr_times = {}
+
+     for staname in sorted(stations):
+-        if not staname in time_grids.keys():
++        if not staname in list(time_grids.keys()):
+             logging.info("%s station not in time_grids" % staname)
+             continue
+         t_th[staname] = []
+@@ -121,9 +121,9 @@
+     nline, num = 0, 0
+
+     for staname in sorted(stations):
+-        if not staname in delay.keys():
++        if not staname in list(delay.keys()):
+             continue
+-        if not staname in t_th.keys():
++        if not staname in list(t_th.keys()):
+             continue
+         coord = [stations[staname]['x'], stations[staname]['y'],
+                  -stations[staname]['elev']]
+@@ -261,7 +261,7 @@
+     :type nbsta: numpy array
+     """
+     from mayavi import mlab
+-    from CZ_color import CZ_W_2_color
++    from .CZ_color import CZ_W_2_color
+
+     # Stations coordinates
+     xsta, ysta, zsta = [], [], []
+@@ -432,8 +432,8 @@
+
+     # ------------------------------------------------------------------------
+     # Iterate over clusters
+-    for i in cluster.keys():
+-        print "CLUSTER %d:" % i, cluster[i], len(cluster[i])
++    for i in list(cluster.keys()):
++        print("CLUSTER %d:" % i, cluster[i], len(cluster[i]))
+         N = len(cluster[i])
+
+         # Hypocentral parameters to be changed
+@@ -461,7 +461,7 @@
+                                          arr_times)
+
+         if verbose:
+-            from clustering import compute_nbsta
++            from .clustering import compute_nbsta
+             nbsta = compute_nbsta(len(locs), coeff, threshold)
+             plot_events(cluster, locs, stations, x, y, z, i, threshold, nbmin,
+                         area, nbsta)
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\filters.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\filters.py      (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\filters.py      (refactored)
+@@ -49,7 +49,7 @@
+     npts = len(x)
+     xs = np.empty(npts-n+1, dtype=float)
+     xs[:] = 0.
+-    for i in xrange(n, npts - n):
++    for i in range(n, npts - n):
+         xs[i] = ss.kurtosis(x[i:(i+n)])
+     return xs
+
+@@ -97,7 +97,7 @@
+     var_value = 0
+     kurt_value = 0
+     xs = np.empty(npts)
+-    for i in xrange(npts):
++    for i in range(npts):
+         mean_value = C*mean_value + (1-C)*x[i]
+         var_value = C*var_value+(1-C)*(x[i]-mean_value)**2
+         if var_value > varx:
+@@ -133,7 +133,7 @@
+     mu2_last = 1.0
+     k4_bar_last = 0.0
+
+-    for i in xrange(npts):
++    for i in range(npts):
+         mu1 = a1*mu1_last + C1*x[i]
+         dx2 = (x[i]-mu1_last)*(x[i]-mu1_last)
+         mu2 = a1*mu2_last + C2*dx2
+@@ -165,7 +165,7 @@
+     mu1_last = 0
+     mu2_last = 1
+
+-    for i in xrange(npts):
++    for i in range(npts):
+         mu1 = a1*mu1_last + C1*x[i]
+         dx2 = (x[i]-mu1_last)*(x[i]-mu1_last)
+         mu2 = a1*mu2_last + C2*dx2
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\hdf5_grids.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\hdf5_grids.py   (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\hdf5_grids.py   (refactored)
+@@ -2,7 +2,7 @@
+ import os
+ import logging
+ import numpy as np
+-from NllGridLib import read_hdr_file
++from .NllGridLib import read_hdr_file
+
+ """
+ Contains wrapper classes to easily manipulate hdf5 files.
+@@ -61,7 +61,7 @@
+
+             if not grid_info is None:
+                 self.grid_info = self.grid_data.attrs
+-                for key, value in grid_info.iteritems():
++                for key, value in grid_info.items():
+                     self.grid_info[key] = value
+
+     def __del__(self):
+@@ -251,7 +251,7 @@
+         # overwritten
+         f = h5py.File(new_filename, 'w')
+         buf = f.create_dataset('grid_data', (nx*ny*nz, ), 'f')
+-        for key, value in new_grid_info.iteritems():
++        for key, value in new_grid_info.items():
+             buf.attrs[key] = value
+
+         #initialize new buffer
+@@ -260,11 +260,11 @@
+         new_z = np.arange(nz)*dz+z_orig
+
+         # loop doing interpolation
+-        for ix in xrange(nx):
++        for ix in range(nx):
+             x = new_x[ix]
+-            for iy in xrange(ny):
++            for iy in range(ny):
+                 y = new_y[iy]
+-                for iz in xrange(nz):
++                for iz in range(nz):
+                     z = new_z[iz]
+                     buf[np.ravel_multi_index((ix, iy, iz), (nx, ny, nz))] = \
+                         self.value_at_point(x, y, z)
+@@ -330,7 +330,7 @@
+     :param opdict: Dictionary of options in WavelocOptions.opdict format
+     """
+     import glob
+-    from NllGridLib import read_hdr_file
++    from .NllGridLib import read_hdr_file
+
+     base_path = opdict['base_path']
+     full_time_grids = glob.glob(os.path.join(base_path, 'lib',
+@@ -372,7 +372,7 @@
+             full_grid = H5SingleGrid(f_timegrid)
+             # copy the common part of the grid info
+             new_info = {}
+-            for name, value in full_grid.grid_info.iteritems():
++            for name, value in full_grid.grid_info.items():
+                 new_info[name] = value
+             # set the new part of the grid info to correspond to the search
+             # grid
+RefactoringTool: No changes to D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\integrate4D.py
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\kurtogram.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\kurtogram.py    (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\kurtogram.py    (refactored)
+@@ -8,10 +8,10 @@
+ import scipy.signal as si
+ import matplotlib.pyplot as plt
+ from obspy.core import utcdatetime
+-from locations_trigger import read_locs_from_file
+-from correlation import BinaryFile
+-from filters import smooth
+-from OP_waveforms import Waveform
++from .locations_trigger import read_locs_from_file
++from .correlation import BinaryFile
++from .filters import smooth
++from .OP_waveforms import Waveform
+
+ logging.basicConfig(level=logging.INFO,
+                     format='%(levelname)s : %(asctime)s : %(message)s')
+@@ -87,13 +87,13 @@
+     :type I: integer
+     """
+
+-    plt.imshow(Kwav, aspect='auto', extent=(0, freq_w[-1], range(2*nlevel)[-1],
+-                                            range(2*nlevel)[0]),
++    plt.imshow(Kwav, aspect='auto', extent=(0, freq_w[-1], list(range(2*nlevel))[-1],
++                                            list(range(2*nlevel))[0]),
+                interpolation='none', cmap=plt.cm.hot_r)
+     #imgplot.set_cmap('gray')
+     xx = np.arange(0, int(freq_w[len(freq_w)-1]), step=5)
+     plt.xticks(xx)
+-    plt.yticks(range(2*nlevel), np.round(Level_w*10)/10)
++    plt.yticks(list(range(2*nlevel)), np.round(Level_w*10)/10)
+     plt.plot(Fs*fi,I,'yo')
+     plt.xlabel("Frequency (Hz)")
+     plt.ylabel("Level k")
+@@ -920,7 +920,7 @@
+     :returns: info
+     """
+
+-    print "Writing a new kurtosis file..."
++    print("Writing a new kurtosis file...")
+     t_orig = info['tdeb']
+     dt = info['dt']
+     ind1 = int((tstart-t_orig)/dt)
+@@ -1053,10 +1053,10 @@
+         info['filter'].append((0, 50))
+
+     if verbose and snr > 3:
+-        print "snr:", snr, " ; snr_ref:", snr_ref
+-        print "snr new kurtosis:", snr_kurt, " ; snr kurtosis reference:",\
+-            snr_kurt_ref
+-        print "kurtosis max, kurt_ref :", kmax, kmax_ref
++        print("snr:", snr, " ; snr_ref:", snr_ref)
++        print("snr new kurtosis:", snr_kurt, " ; snr kurtosis reference:",\
++            snr_kurt_ref)
++        print("kurtosis max, kurt_ref :", kmax, kmax_ref)
+         plot_trace(fig, G, x, x_filt, kurtx, new_kurtx, info, f_lower,
+                    f_upper, snr, snr_ref, snr_kurt, kmax, kmax_ref,
+                    origin_time)
+@@ -1080,8 +1080,8 @@
+     freqs = a.read_binary_file()
+
+     for staname in sorted(freqs):
+-        print "%s %.1f %.1f" % (staname, np.mean(freqs[staname][:, 0]),
+-                                np.mean(freqs[staname][:, 1]))
++        print("%s %.1f %.1f" % (staname, np.mean(freqs[staname][:, 0]),
++                                np.mean(freqs[staname][:, 1])))
+         fig = plt.figure()
+         fig.set_facecolor('white')
+         plt.hist([freqs[staname][:, 0], freqs[staname][:, 1]], 35,
+@@ -1193,8 +1193,8 @@
+         for loc in locs:
+             origin_time = loc['o_time']
+             if opdict['verbose']:
+-                print "******************************************************"
+-                print logging.info(origin_time)
++                print("******************************************************")
++                print(logging.info(origin_time))
+
+             if origin_time > tdeb and origin_time < tfin:
+                 info = kurto(origin_time, info, opdict)
+@@ -1212,7 +1212,7 @@
+
+     # Write the dictionnary 'param' in a binary file
+     if os.path.isfile(kurto_file):
+-        ans = raw_input('%s file already exists. Do you really want to replace\
++        ans = input('%s file already exists. Do you really want to replace\
+ it ? (y or n):\n' % kurto_file)
+         if ans != 'y':
+             kurto_file = "%s_1" % kurto_file
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\locations_prob.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\locations_prob.py       (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\locations_prob.py       (refactored)
+@@ -7,13 +7,13 @@
+ import logging
+ import numpy as np
+
+-from locations_trigger import read_locs_from_file, \
++from .locations_trigger import read_locs_from_file, \
+     do_locations_trigger_setup_and_run
+-from NllGridLib import read_hdr_file
+-from hdf5_grids import get_interpolated_time_grids
+-from migration import do_migration_loop_continuous
+-from OP_waveforms import read_data_compatible_with_time_dict
+-from integrate4D import compute_expected_coordinates4D, \
++from .NllGridLib import read_hdr_file
++from .hdf5_grids import get_interpolated_time_grids
++from .migration import do_migration_loop_continuous
++from .OP_waveforms import read_data_compatible_with_time_dict
++from .integrate4D import compute_expected_coordinates4D, \
+     compute_expected_coordinates3D
+
+
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\locations_trigger.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\locations_trigger.py    (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\locations_trigger.py    (refactored)
+@@ -6,12 +6,12 @@
+ import h5py
+ from obspy.core import utcdatetime, read
+ from obspy.signal import trigger
+-from OP_waveforms import Waveform
+-from filters import smooth
++from .OP_waveforms import Waveform
++from .filters import smooth
+ import matplotlib.pyplot as plt
+ import numpy as np
+ import logging
+-from hdf5_grids import get_interpolated_time_grids
++from .hdf5_grids import get_interpolated_time_grids
+
+
+ def plot_location_triggers(trace, trig_start, trig_end, trig_95_start,
+@@ -81,14 +81,14 @@
+     n_good_kurt = 0
+     wf = Waveform()
+
+-    for ifile in xrange(len(kurt_files)):
++    for ifile in range(len(kurt_files)):
+         kfilename = kurt_files[ifile]
+         dfilename = data_files[ifile]
+
+         st = read(kfilename, headonly=True)
+         staname = st.traces[0].stats.station
+
+-        if staname in time_dict.keys():
++        if staname in list(time_dict.keys()):
+             traveltime = time_dict[staname].value_at_point(stack_x, stack_y,
+                                                            stack_z)
+             start_time = o_time+traveltime-sn_time
+@@ -319,7 +319,7 @@
+                           loc['o_err_left'], loc['o_err_right'], loc['x_mean'],
+                           loc['x_sigma'], loc['y_mean'], loc['y_sigma'],
+                           loc['z_mean'], loc['z_sigma']))
+-            loc_file.write(u"Max = %.2f, %s - %.2f s + %.2f s, x= %.4f pm %.4f\
++            loc_file.write("Max = %.2f, %s - %.2f s + %.2f s, x= %.4f pm %.4f\
+                            km, y= %.4f pm %.4f km, z= %.4f pm %.4f km\n" %
+                            (loc['max_trig'], loc['o_time'].isoformat(),
+                             loc['o_err_left'], loc['o_err_right'],
+@@ -394,13 +394,13 @@
+     """
+
+     # Header of locations.dat
+-    loc_file.write(u'#FILTER : %.1f - %.1f Hz\n' % (opdict['c1'],
++    loc_file.write('#FILTER : %.1f - %.1f Hz\n' % (opdict['c1'],
+                                                     opdict['c2']))
+-    loc_file.write(u'#KURTOSIS = window: %.2f s, recurs: %s, grad: %s, \
++    loc_file.write('#KURTOSIS = window: %.2f s, recurs: %s, grad: %s, \
+                    gauss: %s\n' % (opdict['kwin'], opdict['krec'],
+                                    opdict['kderiv'], opdict['gauss']))
+-    loc_file.write(u'#OPTIONS = reloc: %s\n' % opdict['reloc'])
+-    loc_file.write(u'#LOCATION = level: %d, window of analysis: %.2f s, \
++    loc_file.write('#OPTIONS = reloc: %s\n' % opdict['reloc'])
++    loc_file.write('#LOCATION = level: %d, window of analysis: %.2f s, \
+                    kurtosis snr: %.2f, waveform snr: %.2f, number of \
+                    stations: %d\n\n' % (opdict['loclevel'], opdict['sn_time'],
+                                         opdict['snr_limit'],
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\magnitude.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\magnitude.py    (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\magnitude.py    (refactored)
+@@ -8,10 +8,10 @@
+ from obspy.xseed import Parser
+ from obspy.signal import estimateMagnitude
+ import matplotlib.pyplot as plt
+-from OP_waveforms import Waveform
+-from locations_trigger import read_locs_from_file, read_header_from_file, \
++from .OP_waveforms import Waveform
++from .locations_trigger import read_locs_from_file, read_header_from_file, \
+     write_header_options
+-from NllGridLib import read_stations_file
++from .NllGridLib import read_stations_file
+
+
+ def read_paz(files):
+@@ -192,7 +192,7 @@
+
+     r = np.arange(-3, 3, 0.1)
+     p, logN, i1, i2 = bvalue(mags, r)
+-    print "b-value:", -p[0]
++    print("b-value:", -p[0])
+
+     if opdict['verbose']:
+         fig = plt.figure(figsize=(10, 5))
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\make_SDS_data_links.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\make_SDS_data_links.py  (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\make_SDS_data_links.py  (refactored)
+@@ -39,7 +39,7 @@
+         else:
+             filedict[dirid] = [filename]
+
+-    for dirid, filelist in filedict.iteritems():
++    for dirid, filelist in filedict.items():
+         net = dirid.split('.')[0]
+         sta = dirid.split('.')[1]
+         cha = dirid.split('.')[2]
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\migration.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\migration.py    (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\migration.py    (refactored)
+@@ -11,10 +11,10 @@
+ from itertools import count, islice
+ from time import time
+
+-from OP_waveforms import read_data_compatible_with_time_dict
+-from NllGridLib import read_hdr_file
+-from hdf5_grids import get_interpolated_time_grids
+-from filters import smooth
++from .OP_waveforms import read_data_compatible_with_time_dict
++from .NllGridLib import read_hdr_file
++from .hdf5_grids import get_interpolated_time_grids
++from .filters import smooth
+
+
+ def do_migration_setup_and_run(opdict):
+@@ -95,12 +95,12 @@
+         grid_info = read_hdr_file(search_grid_filename)
+
+         # do migration if have enough data (3 is bare minimum)
+-        if len(data.keys()) >= 3:
++        if len(list(data.keys())) >= 3:
+             logging.info("Migrating data : %s - %s." % (start_time.isoformat(),
+                                                         end_time.isoformat()))
+             do_migration_loop_continuous(opdict, data, delta, start_time,
+                                          grid_info, time_grids)
+-        elif len(data.keys()) == 0:
++        elif len(list(data.keys())) == 0:
+             logging.warn('No data found between %s and %s.' %
+                          (start_time.isoformat(), end_time.isoformat()))
+         else:
+@@ -133,7 +133,7 @@
+     ny = grid_info['ny']
+     nz = grid_info['nz']
+     n_buf = nx*ny*nz
+-    min_npts = min([len(data[key]) for key in data.keys()])
++    min_npts = min([len(data[key]) for key in list(data.keys())])
+
+     dx = grid_info['dx']
+     dy = grid_info['dy']
+@@ -216,7 +216,7 @@
+             f = h5py.File(grid_filename, 'w')
+             sg = f.create_dataset('stack_grid', data=stack_grid)
+         # add useful attributes to the hdf5 dataset
+-        for key, value in grid_info.iteritems():
++        for key, value in grid_info.items():
+             sg.attrs[key] = value
+         sg.attrs['dt'] = delta
+         sg.attrs['start_time'] = stack_start_time.isoformat()
+@@ -256,7 +256,7 @@
+     # save the list of data keys
+     # note : keys of data are all included in keys of time_grid, but there may
+     # be more times than data
+-    wf_ids = data.keys()
++    wf_ids = list(data.keys())
+     n_wf_ids = len(wf_ids)
+
+     n_buf, min_npts = stack_grid.shape
+RefactoringTool: No changes to D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\options.py
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\plot_locations2.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\plot_locations2.py      (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\plot_locations2.py      (refactored)
+@@ -5,13 +5,13 @@
+ import numpy as np
+
+ from obspy.core import UTCDateTime
+-from locations_trigger import read_locs_from_file
+-from locations_prob import read_prob_locs_from_file
+-from NllGridLib import read_hdr_file
+-from hdf5_grids import get_interpolated_time_grids
+-from migration import do_migration_loop_continuous
+-from OP_waveforms import read_data_compatible_with_time_dict
+-from plot_mpl import plotLocationGrid, plotLocationWaveforms, plotProbLoc
++from .locations_trigger import read_locs_from_file
++from .locations_prob import read_prob_locs_from_file
++from .NllGridLib import read_hdr_file
++from .hdf5_grids import get_interpolated_time_grids
++from .migration import do_migration_loop_continuous
++from .OP_waveforms import read_data_compatible_with_time_dict
++from .plot_mpl import plotLocationGrid, plotLocationWaveforms, plotProbLoc
+
+
+ def do_plotting_setup_and_run(opdict, plot_wfm=True, plot_grid=True):
+@@ -89,7 +89,7 @@
+         z = loc['z_mean']
+         # get the corresponding travel-times for time-shifting
+         ttimes = {}
+-        for sta in time_grids.keys():
++        for sta in list(time_grids.keys()):
+             ttimes[sta] = time_grids[sta].value_at_point(x, y, z)
+
+         tshift_migration = max(ttimes.values())
+@@ -127,7 +127,7 @@
+                                                     start_time_migration,
+                                                     end_time_migration)
+             # cut desired portion out of data
+-            for sta in data_dict.keys():
++            for sta in list(data_dict.keys()):
+                 tmp = data_dict[sta]
+
+                 # alignment on origin time
+@@ -197,7 +197,7 @@
+     f = h5py.File(problocgrid, 'r')
+
+     # for each loc
+-    for i in xrange(len(locs)):
++    for i in range(len(locs)):
+         loc = locs[i]
+         prob_loc = prob_locs[i]
+
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\plot_mpl.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\plot_mpl.py     (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\plot_mpl.py     (refactored)
+@@ -29,7 +29,7 @@
+
+     t = np.arange(len(stack_wfm))*dt - (otime - start_time)
+
+-    stations = data_dict.keys()
++    stations = list(data_dict.keys())
+     stations.sort()
+     n_traces = len(stations)+1
+
+@@ -220,7 +220,7 @@
+     y = np.arange(ny)*dy
+     z = (np.arange(nz)*dz+z_orig)*(-1)
+     # setup of t-axis depends on type of stack_start_time
+-    if type(stack_start_time) == float:
++    if isinstance(stack_start_time, float):
+         t = np.arange(nt)*dt+stack_start_time
+     else:
+         t = np.arange(nt)*dt
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\synth_migration.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\synth_migration.py      (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\synth_migration.py      (refactored)
+@@ -16,9 +16,9 @@
+
+     # Creates the synthetic dataset for us to work with
+
+-    from NllGridLib import read_stations_file, read_hdr_file
+-    from migration import migrate_4D_stack, extract_max_values
+-    from hdf5_grids import get_interpolated_time_grids
++    from .NllGridLib import read_stations_file, read_hdr_file
++    from .migration import migrate_4D_stack, extract_max_values
++    from .hdf5_grids import get_interpolated_time_grids
+
+     load_time_grids = False
+     if time_grids is None:
+@@ -55,7 +55,7 @@
+     if 'sta_list' in opdict:
+         sta_list = opdict['sta_list'].split(',')
+     else:
+-        sta_list = stations.keys()
++        sta_list = list(stations.keys())
+
+     # get parameters for noise etc
+     syn_addnoise = opdict['syn_addnoise']
+@@ -107,7 +107,7 @@
+
+     # construct data with these travel times
+     data = {}
+-    for key, delay in ttimes.iteritems():
++    for key, delay in ttimes.items():
+         if syn_addnoise:
+             s_snr = opdict['syn_snr']
+             s = np.random.rand(s_npts)*s_amplitude/s_snr
+@@ -132,7 +132,7 @@
+     n_buf, nt = stack_grid.shape
+
+     # add useful information to dataset
+-    for key, value in grid_info.iteritems():
++    for key, value in grid_info.items():
+         stack_grid.attrs[key] = value
+     stack_grid.attrs['dt'] = s_delta
+     stack_grid.attrs['start_time'] = -stack_shift_time
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_clustering.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_clustering.py      (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_clustering.py      (refactored)
+@@ -1,5 +1,5 @@
+ import unittest
+-from clustering import compute_nbsta, do_clustering
++from .clustering import compute_nbsta, do_clustering
+ import numpy as np
+
+
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_correlation.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_correlation.py     (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_correlation.py     (refactored)
+@@ -1,5 +1,5 @@
+ import unittest
+-from correlation import correlate
++from .correlation import correlate
+ import numpy as np
+
+
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_double_diff.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_double_diff.py     (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_double_diff.py     (refactored)
+@@ -1,5 +1,5 @@
+ import unittest
+-from double_diff import do_double_diff, coord_cluster
++from .double_diff import do_double_diff, coord_cluster
+ from obspy.core import utcdatetime
+ import numpy as np
+
+@@ -112,7 +112,7 @@
+         self.atimes_true = {}
+         self.ttimes_mes = {}
+         self.atimes_mes = {}
+-        for staname in self.sta.keys():
++        for staname in list(self.sta.keys()):
+             xsta = self.sta[staname]['x']
+             ysta = self.sta[staname]['y']
+             zsta = -self.sta[staname]['elev']   # positive z-axis downwards
+@@ -136,7 +136,7 @@
+
+         self.coeff = {}
+         self.delay = {}
+-        for staname in self.sta.keys():
++        for staname in list(self.sta.keys()):
+             self.coeff[staname] = np.zeros((self.N,  self.N))
+             up_tr = np.triu_indices(self.N)
+             self.coeff[staname][up_tr] = 1
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_hdf5.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_hdf5.py    (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_hdf5.py    (refactored)
+@@ -2,8 +2,8 @@
+ import os
+ import unittest
+ import numpy as np
+-from hdf5_grids import H5SingleGrid, H5NllSingleGrid, nll2hdf5
+-from NllGridLib import read_hdr_file
++from .hdf5_grids import H5SingleGrid, H5NllSingleGrid, nll2hdf5
++from .NllGridLib import read_hdr_file
+
+
+ def suite():
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_kurtogram.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_kurtogram.py       (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_kurtogram.py       (refactored)
+@@ -1,7 +1,7 @@
+ import os
+ import unittest
+ import numpy as np
+-from kurtogram import Fast_Kurtogram, getBandwidthAndFrequency, \
++from .kurtogram import Fast_Kurtogram, getBandwidthAndFrequency, \
+     get_h_parameters, Find_wav_kurt, getFTSquaredEnvelope
+
+
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_location.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_location.py        (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_location.py        (refactored)
+@@ -2,12 +2,12 @@
+ import unittest
+ import h5py
+ import numpy as np
+-from options import WavelocOptions
+-from locations_trigger import do_locations_trigger_setup_and_run, \
++from .options import WavelocOptions
++from .locations_trigger import do_locations_trigger_setup_and_run, \
+     trigger_locations_inner, read_locs_from_file
+-from locations_prob import do_locations_prob_setup_and_run, \
++from .locations_prob import do_locations_prob_setup_and_run, \
+     read_prob_locs_from_file
+-from integrate4D import compute_integral4D, compute_expected_coordinates4D
++from .integrate4D import compute_integral4D, compute_expected_coordinates4D
+
+
+ def suite():
+@@ -50,7 +50,7 @@
+
+     def test_smoothing(self):
+
+-        from filters import smooth
++        from .filters import smooth
+
+         x = np.arange(100)
+         max_val = 100.*np.exp(-(x-50.)*(x-50.)/(10.*10.))+np.random.rand(100)
+@@ -172,7 +172,7 @@
+         locs = read_locs_from_file(loc_fname)
+
+         self.assertEqual(len(locs), len(exp_locs))
+-        for i in xrange(len(locs)):
++        for i in range(len(locs)):
+             loc = locs[i]
+             exp_loc = exp_locs[i]
+             self.assertGreater(loc['o_time'],
+@@ -215,7 +215,7 @@
+         f_marginals = h5py.File(hdf5_fname, 'r')
+         self.assertEqual(len(locs), len(prob_locs))
+
+-        for i in xrange(len(locs)):
++        for i in range(len(locs)):
+             loc = locs[i]
+             prob_loc = prob_locs[i]
+             self.assertGreater(prob_loc['o_time'],
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_migration.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_migration.py       (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_migration.py       (refactored)
+@@ -4,9 +4,9 @@
+ import logging
+ import unittest
+ import numpy as np
+-from options import WavelocOptions
+-from migration import do_migration_setup_and_run
+-from synth_migration import generateSyntheticDirac
++from .options import WavelocOptions
++from .migration import do_migration_setup_and_run
++from .synth_migration import generateSyntheticDirac
+
+
+ def suite():
+@@ -70,7 +70,7 @@
+ class SyntheticMigrationTests(unittest.TestCase):
+
+     def test_dirac_migration(self):
+-        from locations_trigger import trigger_locations_inner
++        from .locations_trigger import trigger_locations_inner
+
+         wo = WavelocOptions()
+         wo.set_test_options()
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_nllstuff.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_nllstuff.py        (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_nllstuff.py        (refactored)
+@@ -1,7 +1,7 @@
+ import os
+ import unittest
+ import numpy as np
+-from NllGridLib import latlon2rect, rect2latlon, read_hdr_file,\
++from .NllGridLib import latlon2rect, rect2latlon, read_hdr_file,\
+     read_stations_file
+
+
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_processing.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_processing.py      (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_processing.py      (refactored)
+@@ -2,9 +2,9 @@
+ import os
+ import glob
+ import numpy as np
+-from SDS_processing import do_SDS_processing_setup_and_run
+-from OP_waveforms import Waveform
+-from options import WavelocOptions
++from .SDS_processing import do_SDS_processing_setup_and_run
++from .OP_waveforms import Waveform
++from .options import WavelocOptions
+
+
+ def suite():
+@@ -32,7 +32,7 @@
+ class KurtosisTests(unittest.TestCase):
+
+     def test_ss_kurtosis(self):
+-        from filters import sw_kurtosis1, sw_kurtosis2
++        from .filters import sw_kurtosis1, sw_kurtosis2
+
+         npts = 1000
+         nkurt = 7
+@@ -44,13 +44,13 @@
+         k1 = sw_kurtosis1(sig, nkurt)
+         k2 = sw_kurtosis2(sig, nkurt)
+
+-        self.assertEquals(k1.shape, k2.shape)
++        self.assertEqual(k1.shape, k2.shape)
+         np.testing.assert_allclose(k1, k2, 5)
+-        self.assertAlmostEquals(np.max(k1), np.max(k2))
+-        self.assertEquals(np.argmax(k1), np.argmax(k2))
++        self.assertAlmostEqual(np.max(k1), np.max(k2))
++        self.assertEqual(np.argmax(k1), np.argmax(k2))
+
+     def test_rec_kurtosis(self):
+-        from filters import rec_kurtosis
++        from .filters import rec_kurtosis
+
+         npts = 100000
+         w = 3.0
+@@ -63,7 +63,7 @@
+         C = dt/w
+
+         k = rec_kurtosis(x, C)
+-        self.assertAlmostEquals(np.mean(k), 0.0, 1)
++        self.assertAlmostEqual(np.mean(k), 0.0, 1)
+
+
+ class ProcessingTests(unittest.TestCase):
+@@ -75,7 +75,7 @@
+         self.wo.verify_SDS_processing_options()
+
+     def test_positive_gradient(self):
+-        from OP_waveforms import stream_positive_derivative
++        from .OP_waveforms import stream_positive_derivative
+         from obspy.core import read
+
+         base_path = self.wo.opdict['base_path']
+@@ -97,16 +97,16 @@
+         np.testing.assert_almost_equal(tr.data[20:100], dy_exp[20:100], 2)
+
+     def test_channel_read(self):
+-        from SDS_processing import read_channel_file
++        from .SDS_processing import read_channel_file
+
+         base_path = self.wo.opdict['base_path']
+
+         filename = os.path.join(base_path, 'lib', 'test_channel_file')
+         triplet_list = read_channel_file(filename)
+
+-        self.assertEquals(len(triplet_list), 4)
+-        self.assertEquals(triplet_list[0][1], 'ECH')
+-        self.assertEquals(triplet_list[-1][2], 'UHZ')
++        self.assertEqual(len(triplet_list), 4)
++        self.assertEqual(triplet_list[0][1], 'ECH')
++        self.assertEqual(triplet_list[-1][2], 'UHZ')
+
+     def test_processing(self):
+
+@@ -130,7 +130,7 @@
+         lines.sort()
+         expected_lines.sort()
+         nlines = len(lines)
+-        for i in xrange(nlines) :
++        for i in range(nlines) :
+             line = lines[i]
+             exp_line = expected_lines[i]
+             self.assertSequenceEqual(line.split()[0], exp_line.split()[0])
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_waveloc.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_waveloc.py (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_waveloc.py (refactored)
+@@ -9,7 +9,7 @@
+
+ def setUpModule():
+
+-  from make_SDS_data_links import make_SDS_data_links
++  from .make_SDS_data_links import make_SDS_data_links
+
+   # get basic information
+   base_path=os.getenv('WAVELOC_PATH')
+@@ -56,8 +56,8 @@
+
+ if __name__ == '__main__':
+
+-  import test_processing, test_migration, test_location, test_hdf5, test_nllstuff, test_correlation
+-  import test_double_diff, test_clustering, test_kurtogram
++  from . import test_processing, test_migration, test_location, test_hdf5, test_nllstuff, test_correlation
++  from . import test_double_diff, test_clustering, test_kurtogram
+   import logging
+   logging.basicConfig(level=logging.INFO, format='%(levelname)s : %(asctime)s : %(message)s')
+
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\thread_test.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\thread_test.py  (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\thread_test.py  (refactored)
+@@ -1,7 +1,7 @@
+ #!/usr/bin/env python
+ # encoding: utf-8
+
+-import Queue
++import queue
+ import threading
+ import time
+
+@@ -14,9 +14,9 @@
+         self.name = name
+         self.q = q
+     def run(self):
+-        print "Starting " + self.name
++        print("Starting " + self.name)
+         process_data(self.name, self.q)
+-        print "Exiting " + self.name
++        print("Exiting " + self.name)
+
+ def process_data(threadName, q):
+     while not exitFlag:
+@@ -24,7 +24,7 @@
+         if not workQueue.empty():
+             data = q.get()
+             queueLock.release()
+-            print "%s processing %s" % (threadName, data)
++            print("%s processing %s" % (threadName, data))
+         else:
+             queueLock.release()
+         time.sleep(1)
+@@ -32,7 +32,7 @@
+ threadList = ["Thread-1", "Thread-2", "Thread-3"]
+ nameList = ["One", "Two", "Three", "Four", "Five"]
+ queueLock = threading.Lock()
+-workQueue = Queue.Queue(10)
++workQueue = queue.Queue(10)
+ threads = []
+ threadID = 1
+
+@@ -59,4 +59,4 @@
+ # Wait for all threads to complete
+ for t in threads:
+     t.join()
+-print "Exiting Main Thread"
++print("Exiting Main Thread")
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\AM_geo.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\AM_geo.py    (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\AM_geo.py    (refactored)
+@@ -181,6 +181,6 @@
+   #y=7650290
+
+   P=GeoPointXY(360212,7650290,2378,proj=p)
+-  print P.lat, P.lon
++  print(P.lat, P.lon)
+
+-  print P.dist_km_from(55.0, -21.0)
++  print(P.dist_km_from(55.0, -21.0))
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\AM_subs.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\AM_subs.py   (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\AM_subs.py   (refactored)
+@@ -43,7 +43,7 @@
+
+
+   except ZeroDivisionError:
+-    print "Bad geometry, x1,x0,x2 = %f %f %f"%(x1,x0,x2)
++    print("Bad geometry, x1,x0,x2 = %f %f %f"%(x1,x0,x2))
+
+   for i in range(npts):
+     out_disp.u_t[i]   = c1*seis1.u_t[i] + c0*seis0.u_t[i] + c2*seis2.u_t[i]
+RefactoringTool: No changes to D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\NLL_IO.py
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\extract_located_events.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\extract_located_events.py    (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\extract_located_events.py    (refactored)
+@@ -45,7 +45,7 @@
+
+ station_names=[data_file.split(os.sep)[-1].split('.')[0] for data_file in data_files]
+
+-print station_names
++print(station_names)
+
+ for sta in station_names:
+   subdir=extract_path + os.sep + sta
+@@ -88,7 +88,7 @@
+     data_file=data_files[ifile]
+     base_file_name=data_file.split(os.sep)[-1]
+     outfilename=extract_path + os.sep + sta + os.sep + base_file_name + '_'+stack_time.isoformat()
+-    print outfilename
++    print(outfilename)
+     st=read(data_files[ifile],starttime=start_time, endtime=end_time)
+     tr=st.traces[0]
+     tr.write(outfilename,format='SAC')
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\flexwin_funcs.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\flexwin_funcs.py     (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\flexwin_funcs.py     (refactored)
+@@ -239,6 +239,6 @@
+
+ def print_iMLR(A,iMLR,b,dt):
+   for (iM,iL,iR) in iMLR:
+-    print "%.2f %.2f %.2f : %.2f"%(b+iL*dt,b+iM*dt,b+iR*dt,A[iM])
+-  print "---"
+-
++    print("%.2f %.2f %.2f : %.2f"%(b+iL*dt,b+iM*dt,b+iR*dt,A[iM]))
++  print("---")
++
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\grids_paths.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\grids_paths.py       (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\grids_paths.py       (refactored)
+@@ -206,7 +206,7 @@
+
+     Name must be stripped of all whitespace to match station names in dictionary.
+     """
+-    A=[ (sta.name==name,sta_id) for sta_id,sta in self.stations.iteritems() ]
++    A=[ (sta.name==name,sta_id) for sta_id,sta in self.stations.items() ]
+     A.sort()
+     A.reverse()
+     # Now the first element contains the station id for the name as the second element
+@@ -227,7 +227,7 @@
+         name_key=self.id_by_station_name(name)
+         new_list.stations[name_key]=self.stations[name_key]
+       except:
+-        print "Station name %s not present in station list.  Ignoring." % name
++        print("Station name %s not present in station list.  Ignoring." % name)
+
+     return new_list
+
+@@ -239,11 +239,11 @@
+
+     file=open(filename,'w')
+     if loc_type=='latlon':
+-      for sta_id,sta in self.stations.iteritems():
++      for sta_id,sta in self.stations.items():
+         file.write("GTSRCE %05s LATLON %10.4f %10.4f %4.1f %6.4f\n"%\
+         (sta.name,sta.lat,sta.lon,sta.depth,sta.elev/1000.0))
+     elif loc_type=='xy':
+-      for sta_id,sta in self.stations.iteritems():
++      for sta_id,sta in self.stations.items():
+         file.write("GTSRCE %05s XYZ %10.4f %10.4f %4.1f %6.4f\n"%\
+         (sta.name,sta.x/1000.0,sta.y/1000.0,sta.depth,sta.elev/1000.0))
+     else:
+@@ -256,9 +256,9 @@
+     write stations properties to screen
+     """
+
+-    for sta_id,sta in self.stations.iteritems():
+-      print("%05s %10.4fN %10.4fE %10.1f %10.1f %4.1f %6.1f"%\
+-      (sta.name,sta.lat,sta.lon,sta.x,sta.y,sta.depth,sta.elev))
++    for sta_id,sta in self.stations.items():
++      print(("%05s %10.4fN %10.4fE %10.1f %10.1f %4.1f %6.1f"%\
++      (sta.name,sta.lat,sta.lon,sta.x,sta.y,sta.depth,sta.elev)))
+
+
+
+@@ -334,7 +334,7 @@
+
+
+     # iterate through the stations list to populate channel list
+-    for sta_id,sta in station_list.stations.iteritems():
++    for sta_id,sta in station_list.stations.items():
+       for comp in comp_string:
+         cha_id=cha_id+1
+         cha=Channel(sta,comp,locid)
+@@ -346,7 +346,7 @@
+
+     Station and component names must be stripped of all whitespace to match station names in dictionary.
+     """
+-    A=[ (cha.name==name and cha.comp==comp,cha_id) for cha_id,cha in self.channels.iteritems() ]
++    A=[ (cha.name==name and cha.comp==comp,cha_id) for cha_id,cha in self.channels.items() ]
+     A.sort()
+     A.reverse()
+     # The first elements contain True or False statements, on which to choose the ids in the second elements.
+@@ -381,7 +381,7 @@
+
+     Station name must be stripped of all whitespace to match station names in dictionary.
+     """
+-    A=[ (cha.name==name,cha_id) for cha_id,cha in self.channels.iteritems() ]
++    A=[ (cha.name==name,cha_id) for cha_id,cha in self.channels.items() ]
+     A.sort()
+     A.reverse()
+     # The first elements contain True or False statements, on which to choose the ids in the second elements.
+@@ -443,42 +443,42 @@
+   def _get_npts_(self):
+     return len(self.points)
+   def _get_min_lat_(self):
+-    lats = [p.lat for p in self.points.values()]
++    lats = [p.lat for p in list(self.points.values())]
+     return min(lats)
+   def _get_max_lat_(self):
+-    lats = [p.lat for p in self.points.values()]
++    lats = [p.lat for p in list(self.points.values())]
+     return max(lats)
+   def _get_min_lon_(self):
+-    lons = [p.lon for p in self.points.values()]
++    lons = [p.lon for p in list(self.points.values())]
+     return min(lons)
+   def _get_max_lon_(self):
+-    lons = [p.lon for p in self.points.values()]
++    lons = [p.lon for p in list(self.points.values())]
+     return max(lons)
+
+   def _get_min_x_(self):
+-    xs = [p.x for p in self.points.values()]
++    xs = [p.x for p in list(self.points.values())]
+     return min(xs)
+   def _get_max_x_(self):
+-    xs = [p.x for p in self.points.values()]
++    xs = [p.x for p in list(self.points.values())]
+     return max(xs)
+   def _get_min_y_(self):
+-    ys = [p.y for p in self.points.values()]
++    ys = [p.y for p in list(self.points.values())]
+     return min(ys)
+   def _get_max_y_(self):
+-    ys = [p.y for p in self.points.values()]
++    ys = [p.y for p in list(self.points.values())]
+     return max(ys)
+   def _get_min_z_(self):
+-    zs = [p.z for p in self.points.values()]
++    zs = [p.z for p in list(self.points.values())]
+     return min(zs)
+   def _get_max_z_(self):
+-    zs = [p.z for p in self.points.values()]
++    zs = [p.z for p in list(self.points.values())]
+     return max(zs)
+
+   def _get_min_value_(self):
+-    vals = [p.value for p in self.points.values()]
++    vals = [p.value for p in list(self.points.values())]
+     return min(vals)
+   def _get_max_value_(self):
+-    vals = [p.value for p in self.points.values()]
++    vals = [p.value for p in list(self.points.values())]
+     return max(vals)
+
+
+@@ -575,7 +575,7 @@
+
+     # write the file
+     file=open(filename,'w')
+-    for point_id, point in self.points.iteritems():
++    for point_id, point in self.points.items():
+       if loc_type=='latlon':
+         file.write("%d  %10.5f %10.5f %10.5f\n"%(point_id,point.lon,point.lat,point.z))
+       elif loc_type=='xy':
+@@ -599,7 +599,7 @@
+
+     # append to file
+     file=open(filename,'a')
+-    for point_id, point in self.points.iteritems():
++    for point_id, point in self.points.items():
+       if loc_type=='latlon':
+         file.write("%d  %10.5f %10.5f %10.5f\n"%(point_id,point.lon,point.lat,point.z))
+       elif loc_type=='xy':
+@@ -631,7 +631,7 @@
+
+
+     # interpret line
+-    print vals
++    print(vals)
+     nx=int(vals[0])
+     ny=int(vals[1])
+     nz=int(vals[2])
+@@ -692,7 +692,7 @@
+       z=display_value*1000 # conversion in meters
+
+       # order the points by distance to the display value
+-      A=[( abs(p.z-z), p ) for p in self.points.values()]
++      A=[( abs(p.z-z), p ) for p in list(self.points.values())]
+       A.sort()
+
+       # retain only the points whose distance to the display value is within epsilon of the minimum distance
+@@ -828,7 +828,7 @@
+     # make simple lists of lons and lats
+     lons=[]
+     lats=[]
+-    for point_id, point in self.points.iteritems():
++    for point_id, point in self.points.items():
+         lons.append(point.lon)
+         lats.append(point.lat)
+     x,y = m(lons,lats)
+@@ -1121,12 +1121,12 @@
+     xarray=numpy.arange(self.nx)*self.dx+self.x_orig
+     yarray=numpy.arange(self.ny)*self.dy+self.y_orig
+
+-    print "Making plot grid"
++    print("Making plot grid")
+     values=[self.value_at_point(x,y,z) for y in yarray for x in xarray]
+     vals=array(values)
+     vals.shape=(self.ny,self.nx)
+
+-    print "Plotting grid to file %s"%filename
++    print("Plotting grid to file %s"%filename)
+     pylab.clf()
+     pylab.title(title)
+     pylab.contourf(xarray,yarray,vals,cmap=pylab.cm.jet)
+@@ -1139,12 +1139,12 @@
+     zarray=numpy.arange(self.nz)*self.dz+self.z_orig
+
+
+-    print "Making plot grid"
++    print("Making plot grid")
+     values=[self.value_at_point(x,y,z) for z in zarray for x in xarray]
+     vals=array(values)
+     vals.shape=(self.nz,self.nx)
+
+-    print "Plotting grid to file %s"%filename
++    print("Plotting grid to file %s"%filename)
+     pylab.clf()
+     pylab.title(title)
+     pylab.contourf(xarray,zarray,vals,cmap=pylab.cm.jet)
+@@ -1157,12 +1157,12 @@
+     zarray=numpy.arange(self.nz)*self.dz+self.z_orig
+
+
+-    print "Making plot grid"
++    print("Making plot grid")
+     values=[self.value_at_point(x,y,z) for z in zarray for y in yarray]
+     vals=array(values)
+     vals.shape=(self.nz,self.ny)
+
+-    print "Plotting grid to file %s"%filename
++    print("Plotting grid to file %s"%filename)
+     pylab.clf()
+     pylab.title(title)
+     pylab.contourf(yarray,zarray,vals,25,cmap=pylab.cm.jet)
+@@ -1222,7 +1222,7 @@
+     # read all the full-resolution NLL time files
+     logging.debug('Reading full-resolution NLL time files')
+     logging.debug('Channels contains %d channels'%len(channel_list.channels))
+-    for s in channel_list.channels.values():
++    for s in list(channel_list.channels.values()):
+       try:
+         nll_grid_name="%s.%s.time"%(grid_filename_base,s.name)
+         grid=QDGrid()
+@@ -1236,13 +1236,13 @@
+
+     # set up smaller time grid on search grid only
+     logging.info('Setting up local grid. This could take some time, be patient...')
+-    grid_ids=time_grids.keys()
++    grid_ids=list(time_grids.keys())
+     logging.debug("Grid keys : ")
+     logging.debug(grid_ids)
+
+-    ixarray=range(self.nx)
+-    iyarray=range(self.ny)
+-    izarray=range(self.nz)
++    ixarray=list(range(self.nx))
++    iyarray=list(range(self.ny))
++    izarray=list(range(self.nz))
+
+
+     # by default do not calculate grids
+@@ -1257,7 +1257,7 @@
+       try:
+         self.load_buffer_from_file(tmp_buf_filename)
+         logging.debug("Loaded grid keys:")
+-        logging.debug(self.buf[0].keys())
++        logging.debug(list(self.buf[0].keys()))
+       except IOError:
+         logging.info('Cannot load file %s : calculating grid and writing to file.'%tmp_buf_filename)
+         calculate_grids=True
+@@ -1307,7 +1307,7 @@
+     # read all the full-resolution NLL time files
+     logging.debug('Reading full-resolution NLL time files')
+     logging.debug('Channels contains %d channels'%len(channel_list.channels))
+-    for s in channel_list.channels.values():
++    for s in list(channel_list.channels.values()):
+       try:
+         nll_grid_name="%s.%s.time"%(grid_filename_base,s.name)
+         grid=QDGrid()
+@@ -1325,11 +1325,11 @@
+
+     # set up smaller time grid on search grid only
+     logging.info('Setting up local grid. This could take some time, be patient...')
+-    grid_ids=time_grids.keys()
+-
+-    ixarray=range(self.nx)
+-    iyarray=range(self.ny)
+-    izarray=range(self.nz)
++    grid_ids=list(time_grids.keys())
++
++    ixarray=list(range(self.nx))
++    iyarray=list(range(self.ny))
++    izarray=list(range(self.nz))
+
+
+     self.construct_empty_grid()
+@@ -1375,8 +1375,8 @@
+
+   def set_grid_value(self,ix,iy,iz,value=[]):
+     ib=ix*self.ny*self.nz + iy*self.nz + iz
+-    print self.buf[ib].shape
+-    print numpy.array(value).shape
++    print(self.buf[ib].shape)
++    print(numpy.array(value).shape)
+     self.buf[ib]=numpy.array(value)
+
+   def write_grid_timeslice(self,itime,filename):
+@@ -1481,7 +1481,7 @@
+     self.points={}
+
+     # iterate over points in the base_grid
+-    for grid_id,point in self.base_grid.points.iteritems():
++    for grid_id,point in self.base_grid.points.items():
+
+       # extract the number of keys and the summed cross-correlation vector from the
+       # cross-correlation matrix using the path indicated by sta_grid.corr_keys for
+@@ -1528,7 +1528,7 @@
+       [(point_latitude, point_longitude, cross_correlation)]
+     """
+
+-    corr_at_timestep=[(p.lat,p.lon,p.value[t_index]) for p in self.points.values()]
++    corr_at_timestep=[(p.lat,p.lon,p.value[t_index]) for p in list(self.points.values())]
+     return corr_at_timestep
+
+
+@@ -1606,7 +1606,7 @@
+     if data_list:
+       sta_lat=[]
+       sta_lon=[]
+-      for sta_key in data_list.data.keys():
++      for sta_key in list(data_list.data.keys()):
+          sta_lat.append(data_list.cha_list.channels[sta_key].lat)
+          sta_lon.append(data_list.cha_list.channels[sta_key].lon)
+          #sta_lat.append(data_list.sta_list.stations[sta_key].lat)
+@@ -1671,7 +1671,7 @@
+     self.max_corr=[]
+     x=numpy.zeros(self.n_timelags)
+     for t_index in range(self.n_timelags):
+-      corr_at_timestep=[(p.value[t_index],p.lat,p.lon) for p in self.points.values()]
++      corr_at_timestep=[(p.value[t_index],p.lat,p.lon) for p in list(self.points.values())]
+       max_corr=max(corr_at_timestep)
+       self.max_corr.append(GeoPointLL(max_corr[1],max_corr[2],value=max_corr[0]))
+       x[t_index]=max_corr[0]
+@@ -1795,25 +1795,25 @@
+
+
+     iMLR=setup_MLR(A,i_maxima,i_minima,w_level,c1*t_kurtosis/self.dt,c2*w_level)
+-    print("After setup : %d maxima\n")%(len(iMLR))
++    print(("After setup : %d maxima\n")%(len(iMLR)))
+
+     iMLR_w=reject_on_water_level(A,iMLR,i_minima,c0*w_level)
+-    print("After water level rejection : %d maxima\n")%(len(iMLR_w))
++    print(("After water level rejection : %d maxima\n")%(len(iMLR_w)))
+
+     iMLR_c=reject_on_center_maximum(A,iMLR_w,i_maxima)
+-    print("After center maximum rejection : %d maxima\n")%(len(iMLR_c))
++    print(("After center maximum rejection : %d maxima\n")%(len(iMLR_c)))
+     #print_iMLR(A,iMLR_c,self.b,self.dt)
+
+     iMLR_s=reject_on_separation(A,iMLR_c,i_maxima,i_minima,c3a,c3b*t_kurtosis/self.dt)
+-    print("After separation rejection : %d maxima\n")%(len(iMLR_s))
++    print(("After separation rejection : %d maxima\n")%(len(iMLR_s)))
+     #print_iMLR(A,iMLR_s,self.b,self.dt)
+
+     iMLR=remove_subwindows(A,iMLR_s,t_kurtosis/self.dt)
+-    print("After subwindow rejection : %d maxima\n")%(len(iMLR))
++    print(("After subwindow rejection : %d maxima\n")%(len(iMLR)))
+     #print_iMLR(A,iMLR,self.b,self.dt)
+
+     max_indexes=unique_maxima(A,iMLR,t_kurtosis/self.dt)
+-    print("After removal of duplicates : %d maxima\n")%(len(max_indexes))
++    print(("After removal of duplicates : %d maxima\n")%(len(max_indexes)))
+
+     # the indexes of the true maxima are now in max_indexes
+     # put the corresponding points (with times) in self.locations
+@@ -1973,7 +1973,7 @@
+
+     file_value=open(filename_value,'wb')
+
+-    for key,point in self.points.iteritems():
++    for key,point in self.points.items():
+       file_key.write("%d %.4f %.4f\n"%(key,point.lat,point.lon))
+       point.value.tofile(file_value)
+
+@@ -2050,8 +2050,8 @@
+     self.associations=[]
+     try:
+       # iterate through grid points and stations and select the correct gfns
+-      for grid_id,point in grid.points.iteritems():
+-        for cha_id,cha  in cha_list.channels.iteritems():
++      for grid_id,point in grid.points.items():
++        for cha_id,cha  in cha_list.channels.items():
+           # call the appropriate selection routine
+           ok=False
+           if type=='Maxdist':
+@@ -2110,7 +2110,7 @@
+       # make these keys fixed length, so they can be written to a binary file
+       # and retrieved correctly
+       corr_key="(%04d,%04d)"%(gf_id,sta_id)
+-      if self.corr_keys.has_key(grid_id): # if this grid point is already in the dictionary
++      if grid_id in self.corr_keys: # if this grid point is already in the dictionary
+         self.corr_keys[grid_id].append(corr_key) # append this key
+       else:
+         self.corr_keys[grid_id]=[corr_key] # create a list with this key as first element
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\kurtogram.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\kurtogram.py (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\kurtogram.py (refactored)
+@@ -95,14 +95,14 @@
+           fig = plt.figure()
+           fig.set_facecolor('white')
+           #~ plt.subplot(ratio='auto')
+-          plt.imshow(Kwav,aspect='auto',extent=(0,freq_w[-1],range(2*nlevel)[-1],range(2*nlevel)[0]),interpolation='bilinear')
++          plt.imshow(Kwav,aspect='auto',extent=(0,freq_w[-1],list(range(2*nlevel))[-1],list(range(2*nlevel))[0]),interpolation='bilinear')
+           xx=np.arange(0,int(freq_w[len(freq_w)-1]),step=5)
+           plt.xticks(xx)
+-          plt.yticks(range(2*nlevel),np.round(Level_w*10)/10)
++          plt.yticks(list(range(2*nlevel)),np.round(Level_w*10)/10)
+           #plt.plot(Fs*fi,I,'yo')
+           plt.xlabel("Frequency (Hz)")
+           plt.ylabel("Level k")
+-          print freq_w[-1]
++          print(freq_w[-1])
+           if opt2==1:
+             plt.title("Level %.1f, Bw=%.2f Hz, fc=%.2f Hz"%(np.round(10*Level_w[I])/10,Fs*2**(-(Level_w[I]+1)),Fs*fi))
+             #plt.title("fb-kurt.2 - Kmax=%.1f, level %.1f, Bw=%.2f Hz, fc=%.2f Hz"%(np.round(10*M)/10,np.round(10*Level_w[I])/10,Fs*2**(-(Level_w[I]+1)),Fs*fi))
+@@ -579,7 +579,7 @@
+
+   for sta_line in sta_lines:
+     sta=sta_line.split()[1]
+-    print "##############", sta, "##############"
++    print("##############", sta, "##############")
+
+     filepath="%s/*%s%s"%(data_dir,sta,options.data_glob)
+     kurtpath="%s/*%s%s"%(data_dir,sta,options.kurt_glob)
+@@ -624,4 +624,4 @@
+     wf.values[:]=a
+     wf.write_to_file_filled(new_file,format='SAC')
+
+-  print "temps de calcul:",time.time()-tref
++  print("temps de calcul:",time.time()-tref)
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\learn_kwin.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\learn_kwin.py        (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\learn_kwin.py        (refactored)
+@@ -32,7 +32,7 @@
+
+ misfits=[]
+ k_factors=np.linspace(0.01,0.2,30)
+-print k_factors
++print(k_factors)
+ for k_factor in k_factors:
+   k_rec=kwin*k_factor
+
+@@ -50,4 +50,4 @@
+   logging.info('misfit = %.3f'%misfit)
+   misfits.append((k_factor,misfit))
+
+-print misfits
++print(misfits)
+RefactoringTool: No changes to D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\obspyaux.py
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_dem_mayavi.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_dem_mayavi.py   (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_dem_mayavi.py   (refactored)
+@@ -39,7 +39,7 @@
+ demy=numpy.array(dem['YIsub']).flatten()/1000.0
+ demz=numpy.array(dem['ZIsub']).flatten()/1000.0
+
+-print "Read DEM"
++print("Read DEM")
+
+ # data
+ data_glob = "*2010-10-14T00:15:40.98*.dat"
+@@ -49,19 +49,19 @@
+
+ # creat the object to contain the stations
+ pd = tvtk.PolyData()
+-pd.points = [[s.x/1000.0, s.y/1000.0, -s.elev/1000.0] for s in sta.stations.values()]
++pd.points = [[s.x/1000.0, s.y/1000.0, -s.elev/1000.0] for s in list(sta.stations.values())]
+
+ # create the DEM
+ dem_data=tvtk.PolyData()
+ dem_data.points = numpy.array([demx, demy, demz]).T
+
+ for data_file in data_files :
+-  print data_file
++  print(data_file)
+   data=QDGrid()
+   data.read_NLL_hdr_file(hdr_file)
+   data.buf=numpy.fromfile(data_file, dtype=numpy.int16)
+   data.buf=numpy.array(data.buf, dtype=numpy.float)
+-  print data.buf.min(), data.buf.max()
++  print(data.buf.min(), data.buf.max())
+   data.buf.shape = (data.nx, data.ny, data.nz)
+   max_ib=numpy.argmax(data.buf)
+   ix,iy,iz=data.get_ix_iy_iz(max_ib)
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_locations.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_locations.py    (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_locations.py    (refactored)
+@@ -99,7 +99,7 @@
+   time_grid.populate_from_time_grids(grid_filename_base,cha,out_path,load_buf=True)
+
+
+-print "Getting Grid geometry"
++print("Getting Grid geometry")
+ dummy_grid=QDGrid()
+ dummy_grid.read_NLL_hdr_file(hdr_file)
+ (nx,ny,nz)=(dummy_grid.nx, dummy_grid.ny, dummy_grid.nz)
+@@ -139,7 +139,7 @@
+ #for loc in locs[0:4]:
+ for loc in locs:
+
+-  print loc
++  print(loc)
+
+   stack_time=loc[1]
+   stack_time_err_left=loc[2]
+@@ -206,7 +206,7 @@
+
+   # create .png file using mayavi
+   if options.run_mayavi:
+-    print "Creating plot using mayavi"
++    print("Creating plot using mayavi")
+     (x_data,y_data,z_data)=plot_slice_mayavi(grid_name, png_name, hypo_x, hypo_y, hypo_z, options.search_grid,max_stack_value)
+   png=Image.open(png_name)
+
+@@ -215,7 +215,7 @@
+
+   n_traces=len(data_files)+1
+
+-  print "Creating figure..."
++  print("Creating figure...")
+
+   # create figure
+
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_only_dem_mayavi.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_only_dem_mayavi.py      (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_only_dem_mayavi.py      (refactored)
+@@ -24,7 +24,7 @@
+
+ base_path=os.getenv('WAVELOC_PATH')
+ lib_path="%s/lib"%base_path
+-print lib_path
++print(lib_path)
+
+
+ # stations
+@@ -44,7 +44,7 @@
+
+ # creat the object to contain the stations
+ pd = tvtk.PolyData()
+-pd.points = [[s.x/1000.0, s.y/1000.0, -s.elev/1000.0] for s in sta.stations.values()]
++pd.points = [[s.x/1000.0, s.y/1000.0, -s.elev/1000.0] for s in list(sta.stations.values())]
+
+ # create the DEM
+ dem_data=tvtk.PolyData()
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_slice_mayavi.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_slice_mayavi.py (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_slice_mayavi.py (refactored)
+@@ -39,7 +39,7 @@
+
+   # create the object to contain the stations
+   pd = tvtk.PolyData()
+-  pd.points = [[s.x/1000.0, s.y/1000.0, -s.elev/1000.0] for s in sta.stations.values()]
++  pd.points = [[s.x/1000.0, s.y/1000.0, -s.elev/1000.0] for s in list(sta.stations.values())]
+
+   # create the object to contain the stations
+   try:
+@@ -49,12 +49,12 @@
+     pass
+
+   # read the dat file
+-  print dat_filename
++  print(dat_filename)
+   data=QDGrid()
+   data.read_NLL_hdr_file(hdr_file)
+   data.buf=numpy.fromfile(dat_filename, dtype=numpy.int16)
+   max_ib=numpy.argmax(data.buf)
+-  print max_ib
++  print(max_ib)
+   max_val=data.buf[max_ib]
+   ix,iy,iz=data.get_ix_iy_iz(max_ib)
+   #data.buf=numpy.array(data.buf, dtype=numpy.float)
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\pysacio.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\pysacio.py   (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\pysacio.py   (refactored)
+@@ -141,13 +141,13 @@
+   #
+   key = string.lower(item) # convert the item to lower case
+   #
+-  if fdict.has_key(key):
++  if key in fdict:
+     index = fdict[key]
+     return(hf[index])
+-  elif idict.has_key(key):
++  elif key in idict:
+     index = idict[key]
+     return(hi[index])
+-  elif sdict.has_key(key):
++  elif key in sdict:
+     index = sdict[key]
+     length = 8
+     #
+@@ -184,15 +184,15 @@
+   key = string.lower(item) # convert the item to lower case
+   #
+   ok = 0
+-  if fdict.has_key(key):
++  if key in fdict:
+     index = fdict[key]
+     hf[index] = float(value)
+     ok = 1
+-  elif idict.has_key(key):
++  elif key in idict:
+     index = idict[key]
+     hi[index] = int(value)
+     ok = 1
+-  elif sdict.has_key(key):
++  elif key in sdict:
+     index = sdict[key]
+     vlen = len(value)
+     if index == 0:
+@@ -571,7 +571,7 @@
+     f.close()
+     ok = 1
+   except:
+-    print 'Error writing file ', ofname
++    print('Error writing file ', ofname)
+     ok = 0
+   return(ok)
+ #
+@@ -598,7 +598,7 @@
+     f.close()
+     ok = 1
+   except:
+-    print 'Error writing file ', ofname
++    print('Error writing file ', ofname)
+     ok = 0
+   return(ok)
+ #
+@@ -613,17 +613,17 @@
+ def PrintIValue(label='=', value=-12345):
+   """Convenience function for printing undefined integer header values"""
+   if value != -12345:
+-    print label, value
++    print(label, value)
+ ###############################################################################
+ def PrintFValue(label='=', value=-12345.0):
+   """Convenience function for printing undefined float header values"""
+   if value != -12345.0:
+-    print '%s %.8g' % (label, value)
++    print('%s %.8g' % (label, value))
+ ###############################################################################
+ def PrintSValue(label='=', value='-12345'):
+   """Convenience function for printing undefined string header values"""
+   if value != '-12345':
+-    print label, value
++    print(label, value)
+ #
+ ###############################################################################
+ #
+@@ -639,14 +639,14 @@
+   nzyear = GetHvalue('nzyear',hf,hi,hs)
+   nzjday = GetHvalue('nzjday',hf,hi,hs)
+   [month, date] = AM_subs.jday_to_month_day(nzyear, nzjday)
+-  print '%s %2.2d/%2.2d/%d (%d) %d:%d:%d.%d' % ('\nReference Time = ',    \
++  print('%s %2.2d/%2.2d/%d (%d) %d:%d:%d.%d' % ('\nReference Time = ',    \
+               month, date, \
+                     GetHvalue('nzyear',hf,hi,hs), \
+                                 GetHvalue('nzjday',hf,hi,hs), \
+                                 GetHvalue('nzhour',hf,hi,hs), \
+                                 GetHvalue('nzmin',hf,hi,hs),  \
+                                 GetHvalue('nzsec',hf,hi,hs),  \
+-                                GetHvalue('nzmsec',hf,hi,hs))
++                                GetHvalue('nzmsec',hf,hi,hs)))
+   PrintIValue('Npts  = ',GetHvalue('npts',hf,hi,hs))
+   PrintFValue('Delta = ',  GetHvalue('delta',hf,hi,hs)  )
+   PrintFValue('Begin = ',  GetHvalue('b',hf,hi,hs)  )
+@@ -692,14 +692,14 @@
+   nzyear = GetHvalue('nzyear',hf,hi,hs)
+   nzjday = GetHvalue('nzjday',hf,hi,hs)
+   [month, date] = AM_subs.jday_to_month_day(nzyear, nzjday)
+-  print '%s %2.2d/%2.2d/%d (%d) %d:%d:%d.%d' % ('\nReference Time = ',    \
++  print('%s %2.2d/%2.2d/%d (%d) %d:%d:%d.%d' % ('\nReference Time = ',    \
+               month, date, \
+                     GetHvalue('nzyear',hf,hi,hs), \
+                                 GetHvalue('nzjday',hf,hi,hs), \
+                                 GetHvalue('nzhour',hf,hi,hs), \
+                                 GetHvalue('nzmin',hf,hi,hs),  \
+                                 GetHvalue('nzsec',hf,hi,hs),  \
+-                                GetHvalue('nzmsec',hf,hi,hs))
++                                GetHvalue('nzmsec',hf,hi,hs)))
+   PrintIValue('Npts  = ',GetHvalue('npts',hf,hi,hs))
+   PrintFValue('Delta = ',  GetHvalue('delta',hf,hi,hs)  )
+   PrintFValue('Begin = ',  GetHvalue('b',hf,hi,hs)  )
+@@ -745,7 +745,7 @@
+   if ok:
+     return(GetHvalue(theItem,hf, hi, hs))
+   else:
+-    print "Problem in GetHvalueFromFile."
++    print("Problem in GetHvalueFromFile.")
+     return(-12345)
+ #
+ ###############################################################################
+@@ -771,7 +771,7 @@
+         #
+         #print 'Changed ',before,' to ',after,' in ',thePath
+   else:
+-    print "Problem in SetHvalueInFile."
++    print("Problem in SetHvalueInFile.")
+   #
+   return(ok)
+
+RefactoringTool: No changes to D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\reloc_by_snr.py
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\run_PdF_waveloc.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\run_PdF_waveloc.py   (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\run_PdF_waveloc.py   (refactored)
+@@ -38,16 +38,16 @@
+
+
+   if options.verbose:
+-    print ""
+-    print "Input parameters:"
+-    print "-----------------"
+-    print "Grid        = %s"%(grid_filename_base)
+-    print "Stations    = %s"%(stations_filename)
+-    print "Data        = %s"%(os.path.join(data_dir,data_glob))
+-    print ""
+-    print "Output parameters:"
+-    print "-----------------"
+-    print "Out dir     = %s"%(output_dir)
++    print("")
++    print("Input parameters:")
++    print("-----------------")
++    print("Grid        = %s"%(grid_filename_base))
++    print("Stations    = %s"%(stations_filename))
++    print("Data        = %s"%(os.path.join(data_dir,data_glob)))
++    print("")
++    print("Output parameters:")
++    print("-----------------")
++    print("Out dir     = %s"%(output_dir))
+
+
+   #raise UserWarning ('Stop here')
+@@ -55,18 +55,18 @@
+   #                       START PROCESSING
+   #######################################################################
+
+-  print ""
+-  print "----------------"
+-  print "START PROCESSING"
+-  print "----------------"
+-  print ""
++  print("")
++  print("----------------")
++  print("START PROCESSING")
++  print("----------------")
++  print("")
+
+   # Create Obspy streams for output
+
+   #  ***** reading station file ******
+
+   if options.verbose:
+-    print "Reading station file"
++    print("Reading station file")
+
+   if options.time:
+     t_ref=time()
+@@ -76,7 +76,7 @@
+
+   if options.time:
+     t=time()-t_ref
+-    print "Time for reading %d stations from file : %.4f s\n" % (sta.nsta,t)
++    print("Time for reading %d stations from file : %.4f s\n" % (sta.nsta,t))
+
+   datafile_list=glob.glob(os.path.join(data_dir,data_glob))
+
+@@ -90,7 +90,7 @@
+   # (interpolated from the full NLL files) so we can free up the memory as soon as possible
+
+   if options.verbose:
+-    print "Extracting useful travel-times"
++    print("Extracting useful travel-times")
+
+   if options.time:
+     t_ref=time()
+@@ -101,7 +101,7 @@
+
+   if options.time:
+     t=time()-t_ref
+-    print "Time for extracting and saving %dx%dx%dx%d travel-times : %.2f s\n" % (time_grid.nx,time_grid.ny,time_grid.nz,cha.ncha,t)
++    print("Time for extracting and saving %dx%dx%dx%d travel-times : %.2f s\n" % (time_grid.nx,time_grid.ny,time_grid.nz,cha.ncha,t))
+
+
+
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\run_kurtogram.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\run_kurtogram.py     (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\run_kurtogram.py     (refactored)
+@@ -33,7 +33,7 @@
+ wf.read_from_file(options.data_file,starttime=tdeb,endtime=tfin)
+ dt=wf.delta
+ x=wf.values
+-print(wf.stream)
++print((wf.stream))
+
+ # set up parameters for kurtogram analysis
+ N=len(x)
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\sub_PdF_waveloc.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\sub_PdF_waveloc.py   (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\sub_PdF_waveloc.py   (refactored)
+@@ -163,7 +163,7 @@
+
+   # Set the global variable delta (dt for all the seismograms)
+   try:
+-    delta=data.values()[0].delta
++    delta=list(data.values())[0].delta
+   except IndexError:
+     raise UserWarning("File list empty - check --dataglob option")
+
+@@ -199,7 +199,7 @@
+
+   # Set the global variable delta (dt for all the seismograms)
+   try:
+-    delta=data.values()[0].delta
++    delta=list(data.values())[0].delta
+   except IndexError:
+     raise UserWarning("File list empty - check --dataglob option")
+
+RefactoringTool: No changes to D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\waveloc_funcs.py
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\kurtogram\python\Fast_Kurtogram.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\kurtogram\python\Fast_Kurtogram.py   (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\kurtogram\python\Fast_Kurtogram.py   (refactored)
+@@ -55,10 +55,10 @@
+         fc = .4                                        # a short filter is just good enough!
+         h = si.firwin(N+1,fc) * np.exp(2*1j*np.pi*np.arange(N+1)*0.125)
+         n = np.arange(2,N+2)
+-        print n
++        print(n)
+         g = h[(1-n)%N]*(-1)**(1-n)
+         N = np.fix((3./2.*N))
+-        print N
++        print(N)
+         h1 = si.firwin(N+1,2./3*fc)*np.exp(2j*np.pi*np.arange(N+1)*0.25/3.)
+         #~ plt.plot(h1)
+         #~ plt.show()
+@@ -88,7 +88,7 @@
+         l1 = Level_w[index[0]+1]
+         fi = (index[1])/3./2**(nlevel+1)
+         fi += 2.**(-2-l1)
+-        print fi, l1, Fs*fi
++        print(fi, l1, Fs*fi)
+         plt.colorbar()
+         plt.show()
+     else:
+@@ -109,7 +109,7 @@
+             c,Bw,fc = Find_wav_kurt(x,h,g,h1,h2,h3,nlevel,lev,fi,'kurt2',Fs)
+         #~ else
+             #~ [c,Bw,fc] = Find_wav_kurt(x,h,g,h1,h2,h3,nlevel,lev,fi,'kurt1',Fs);
+-        test = int(raw_input('Do you want to keep on filtering out transients (yes = 1 ; no = 0): '))
++        test = int(input('Do you want to keep on filtering out transients (yes = 1 ; no = 0): '))
+
+
+
+@@ -131,26 +131,26 @@
+             logging.error('nlevel must be smaller')
+         level=nlevel
+     x = x.ravel()
+-    print "THIS"
+-    print h, g
++    print("THIS")
++    print(h, g)
+     KD, KQ = K_wpQ_local(x,h,g,h1,h2,h3,nlevel,opt,level)
+     K = np.zeros((2*nlevel,3*2**nlevel))
+-    print "******************************************************"
+-    print KD.shape, KQ.shape, K.shape
++    print("******************************************************")
++    print(KD.shape, KQ.shape, K.shape)
+     #~ K = KD
+     for i in range(nlevel-1):
+-        print K[2*i,:].shape
++        print(K[2*i,:].shape)
+         K[2*i,:] = KD[i+1,:]
+-        print K[2*i+1,:].shape
++        print(K[2*i+1,:].shape)
+         K[2*i+1,:] = KQ[i,:]
+
+
+     K[2*nlevel-1,:] = KD[nlevel,:]
+-    print "K Final Shape", K.shape
++    print("K Final Shape", K.shape)
+     return K
+
+ def K_wpQ_local(x,h,g,h1,h2,h3,nlevel,opt,level):
+-    print "LEVEL", level
++    print("LEVEL", level)
+     a,d = DBFB(x,h,g)
+
+     N = len(a)
+@@ -175,24 +175,24 @@
+         Kd3 = 0
+
+     if level ==1:
+-        print "level = 1"
++        print("level = 1")
+         K =np.array([K1*np.ones(3),K2*np.ones(3)]).flatten()
+-        print 'K.shape',K.shape
++        print('K.shape',K.shape)
+         KQ = np.array([Ka1,Ka2,Ka3,Kd1,Kd2,Kd3])
+-        print 'KQ.shape',KQ.shape
++        print('KQ.shape',KQ.shape)
+     if level > 1:
+-        print "entering rec with level %i"%(level-1)
+-        print "doing A"
++        print("entering rec with level %i"%(level-1))
++        print("doing A")
+         Ka,KaQ = K_wpQ_local(a,h,g,h1,h2,h3,nlevel,opt,level-1)
+-        print "doing D"
++        print("doing D")
+         Kd,KdQ = K_wpQ_local(d,h,g,h1,h2,h3,nlevel,opt,level-1)
+-        print "out of rec level %i" % (level -1)
+-        print Ka.shape, Kd.shape
++        print("out of rec level %i" % (level -1))
++        print(Ka.shape, Kd.shape)
+         K1 = K1*np.ones(np.max(Ka.shape))
+         K2 = K2*np.ones(np.max(Kd.shape))
+         K12 = np.append(K1,K2)
+         Kad = np.hstack((Ka, Kd))
+-        print ">", K12.shape, Kad.shape
++        print(">", K12.shape, Kad.shape)
+         K = np.vstack((K12,Kad))
+
+         Long = 2./6*np.max(KaQ.shape)
+@@ -203,8 +203,8 @@
+         Kd2 = Kd2*np.ones(Long)
+         Kd3 = Kd3*np.ones(Long)
+         tmp = np.hstack((KaQ,KdQ))
+-        print "HEEEERE"
+-        print tmp.shape
++        print("HEEEERE")
++        print(tmp.shape)
+         KQ = np.concatenate((Ka1,Ka2,Ka3,Kd1,Kd2,Kd3))
+         KQ = np.vstack((KQ, tmp))
+         #~ if tmp.shape[0] != KQ.shape[0]:
+@@ -212,14 +212,14 @@
+         #~ for i in range(tmp.shape[0]):
+             #~ KQ = np.vstack((KQ,tmp[i]))
+
+-        print "4", K.shape, KQ.shape
++        print("4", K.shape, KQ.shape)
+
+
+
+     if level == nlevel:
+         K1 = kurt(x,opt)
+         K = np.vstack((K1*np.ones(np.max(K.shape)), K))
+-        print "K shape", K.shape
++        print("K shape", K.shape)
+
+         a1,a2,a3 = TBFB(x,h1,h2,h3)
+         Ka1 = kurt(a1[len(h)-1:],opt)
+@@ -229,14 +229,14 @@
+         Ka1 = Ka1*np.ones(Long)
+         Ka2 = Ka2*np.ones(Long)
+         Ka3 = Ka3*np.ones(Long)
+-        print KQ.shape
++        print(KQ.shape)
+         tmp = np.array(KQ[0:-2])
+-        print "level==nlevel"
++        print("level==nlevel")
+
+         KQ = np.concatenate((Ka1,Ka2,Ka3))
+         KQ = np.vstack((KQ,tmp))
+
+-    print "i'm leaving level=%i and K.shape="%level,K.shape, "and KQ.shape=",KQ.shape
++    print("i'm leaving level=%i and K.shape="%level,K.shape, "and KQ.shape=",KQ.shape)
+     return K, KQ
+
+ def kurt(x, opt):
+@@ -330,16 +330,16 @@
+         bcoeff = i-i2*3
+     acoeff = acoeff[::-1]
+     c = K_wpQ_filt(x,h,g,h1,h2,h3,acoeff,bcoeff,temp_level)
+-    print c
++    print(c)
+     kx = kurt(c,opt)
+
+-    print "kx", kx
++    print("kx", kx)
+
+     sig = np.median(np.abs(c))/np.sqrt(np.pi/2.)
+-    print sig
++    print(sig)
+     threshold = sig*raylinv(np.array([.999,]),np.array([1,]))
+-    print "threshold", threshold
+-    spec = int(raw_input('     Do you want to see the envelope spectrum (yes = 1 ; no = 0): '))
++    print("threshold", threshold)
++    spec = int(input(' Do you want to see the envelope spectrum (yes = 1 ; no = 0): '))
+
+     fig = plt.figure()
+     t = np.arange(len(x))/Fs
+@@ -352,7 +352,7 @@
+     #~ plt.title('Envlp of the filtr sgl, Bw=Fs/2^{'+(level+1)+'}, fc='+(Fs*fc)+'Hz, Kurt='+(np.round(np.abs(10*kx))/10)+', \alpha=.1%']
+     plt.xlabel('time [s]')
+     if spec == 1:
+-        print nextpow2(len(c))
++        print(nextpow2(len(c)))
+         nfft = int(nextpow2(len(c)))
+         env = np.abs(c)**2
+         S = np.abs(np.fft.fft(env.ravel()-np.mean(env)*np.hanning(len(env))/len(env),nfft))
+@@ -372,7 +372,7 @@
+         logging.error('i must be such that i < 2^k !!')
+
+     a = np.zeros(k+1)
+-    print a.shape
++    print(a.shape)
+     temp = i
+     for l in np.arange(k,0,-1):
+         a[k-l] = np.fix(temp/2**l)
+@@ -414,7 +414,7 @@
+     return c
+
+ def  K_wpQ_filt_local(x,h,g,h1,h2,h3,acoeff,bcoeff,level):
+-    print level, x[:10]
++    print(level, x[:10])
+     a,d = DBFB(x,h,g)         # perform one analysis level into the analysis tree
+     N = len(a)
+     d = d*np.power(-1.,np.arange(1,N+1))
+@@ -438,12 +438,12 @@
+             elif bcoeff == 2:
+                 c = c3[len(h3)-1:]
+     if level > 1:
+-        print "acoeff", acoeff[level-1]
++        print("acoeff", acoeff[level-1])
+         if acoeff[level-1] == 0:
+             c = K_wpQ_filt_local(a,h,g,h1,h2,h3,acoeff,bcoeff,level-1)
+         else:
+             c = K_wpQ_filt_local(d,h,g,h1,h2,h3,acoeff,bcoeff,level-1)
+-    print 'kurt', kurt(c,'kurt2')
++    print('kurt', kurt(c,'kurt2'))
+     return c
+
+ def raylinv(p,b):
+@@ -465,18 +465,18 @@
+
+     # Put in the correct values when P is 1.
+     k = np.where(p == 1)[0]
+-    print k
++    print(k)
+     if len(k)!=0:
+         tmp  = Inf
+         x[k] = tmp(len(k))
+
+     k = np.where(((b > 0) & (p > 0) & (p < 1)))[0]
+-    print k
++    print(k)
+
+     if len(k)!=0:
+         pk = p[k]
+         bk = b[k]
+-        print pk, bk
++        print(pk, bk)
+         x[k] = np.sqrt((-2*bk ** 2) * np.log(1 - pk))
+     return x
+
+RefactoringTool: No changes to D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\examples\run_syn_example.py
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\examples\run_syn_resolution_example.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\examples\run_syn_resolution_example.py  (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\examples\run_syn_resolution_example.py  (refactored)
+@@ -157,7 +157,7 @@
+     dt_grid[...] = -999.0
+
+     # iterate over points
+-    for ib_dec in xrange(nb_dec):
++    for ib_dec in range(nb_dec):
+         ix_dec, iy_dec, iz_dec = np.unravel_index(ib_dec,
+                                                   (nx_dec, ny_dec, nz_dec))
+         # reconstruct the indexes in the original grid
+@@ -174,7 +174,7 @@
+
+         # do analysis for this point
+         n_locs, best_dist, best_dt, trig_loc = analyseLocs(locs, wo, test_info)
+-        print ix, iy, iz, n_locs, best_dist, best_dt
++        print(ix, iy, iz, n_locs, best_dist, best_dt)
+
+         # save into array
+         dist_grid[ib_dec] = best_dist
+@@ -188,7 +188,7 @@
+     f_dist = f.create_dataset('dist_grid', data=dist_grid)
+     f_nloc = f.create_dataset('nloc_grid', data=nloc_grid)
+     f_dt = f.create_dataset('dt_grid', data=dt_grid)
+-    for key, value in dec_grid_info.iteritems():
++    for key, value in dec_grid_info.items():
+         f_dist.attrs[key] = value
+         f_nloc.attrs[key] = value
+         f_dt.attrs[key] = value
+@@ -239,7 +239,7 @@
+     sta_x = np.empty(len(stations), dtype='float32')
+     sta_y = np.empty(len(stations), dtype='float32')
+     i = 0
+-    for key, value in stations.iteritems():
++    for key, value in stations.items():
+         if value['loc_type'] == 'XYZ':
+             sta_x[i] = value['x']-x_orig
+             sta_y[i] = value['y']-y_orig
+@@ -261,7 +261,7 @@
+
+     col = plt.cm.jet
+     # iterate over iz
+-    for iz in xrange(nz):
++    for iz in range(nz):
+         plt.clf()
+         plt.figure(figsize=(10, 4.5))
+
+RefactoringTool: No changes to D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\examples\run_waveloc_example.py
+RefactoringTool: No changes to D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\examples\setup_examples.py
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\nll\BEL\network_center.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\nll\BEL\network_center.py       (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\nll\BEL\network_center.py       (refactored)
+@@ -18,6 +18,6 @@
+ cenlat=np.mean(deglats)
+ cenlon=np.mean(deglons)
+
+-print deglats, deglons, names
++print(deglats, deglons, names)
+
+-print cenlat, cenlon
++print(cenlat, cenlon)
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\nll\IJEN\network_center.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\nll\IJEN\network_center.py      (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\nll\IJEN\network_center.py      (refactored)
+@@ -18,6 +18,6 @@
+ cenlat=np.mean(deglats)
+ cenlon=np.mean(deglons)
+
+-print deglats, deglons, names
++print(deglats, deglons, names)
+
+-print cenlat, cenlon
++print(cenlat, cenlon)
+RefactoringTool: Can't parse D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\nll\LAQUILA\extract_used_stations.py: ParseError: bad input: type=9, value='[', context=('', (18, 49))
+RefactoringTool: No changes to D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\scripts\run_PdF_test.py
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\scripts\run_syn_Emilia.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\scripts\run_syn_Emilia.py       (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\scripts\run_syn_Emilia.py       (refactored)
+@@ -63,7 +63,7 @@
+ proj_info['orig_lon'] = np.float(proj_line.split()[5])
+ proj_info['map_rot'] = np.float(proj_line.split()[7])
+
+-print proj_info
++print(proj_info)
+
+
+ event1ll=(44.9235 , 11.1418)
+@@ -85,7 +85,7 @@
+ griddir=os.path.join(base_path,'out',wo.opdict['outdir'],'grid')
+
+ # compute all grids
+-for evname,ev in events.iteritems():
++for evname,ev in events.items():
+   for dep in depths:
+     x,y=latlon2rect('TRANS_SIMPLE',ev[0],ev[1],proj_info)
+
+RefactoringTool: No changes to D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\scripts\run_syn_PdF.py
+RefactoringTool: Refactored D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\sphinx\conf.py
+--- D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\sphinx\conf.py  (original)
++++ D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\sphinx\conf.py  (refactored)
+@@ -40,8 +40,8 @@
+ master_doc = 'index'
+
+ # General information about the project.
+-project = u'waveloc'
+-copyright = u'2014, Alessia Maggi'
++project = 'waveloc'
++copyright = '2014, Alessia Maggi'
+
+ # The version info for the project you're documenting, acts as replacement for
+ # |version| and |release|, also used in various other places throughout the
+@@ -178,8 +178,8 @@
+ # Grouping the document tree into LaTeX files. List of tuples
+ # (source start file, target name, title, author, documentclass [howto/manual]).
+ latex_documents = [
+-  ('index', 'WaveLoc.tex', u'WaveLoc Documentation',
+-   u'Alessia Maggi', 'manual'),
++  ('index', 'WaveLoc.tex', 'WaveLoc Documentation',
++   'Alessia Maggi', 'manual'),
+ ]
+
+ # The name of an image file (relative to this directory) to place at the top of
+@@ -211,6 +211,6 @@
+ # One entry per manual page. List of tuples
+ # (source start file, name, description, authors, manual section).
+ man_pages = [
+-    ('index', 'waveloc', u'WaveLoc Documentation',
+-     [u'Alessia Maggi'], 1)
++    ('index', 'waveloc', 'WaveLoc Documentation',
++     ['Alessia Maggi'], 1)
+ ]
+RefactoringTool: Files that were modified:
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\setup.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\CZ_color.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\NllGridLib.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\OP_waveforms.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\SDS_processing.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\clustering.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\correlation.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\double_diff.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\filters.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\hdf5_grids.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\integrate4D.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\kurtogram.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\locations_prob.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\locations_trigger.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\magnitude.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\make_SDS_data_links.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\migration.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\options.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\plot_locations2.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\plot_mpl.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\synth_migration.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_clustering.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_correlation.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_double_diff.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_hdf5.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_kurtogram.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_location.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_migration.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_nllstuff.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_processing.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\test_waveloc.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\thread_test.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\AM_geo.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\AM_subs.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\NLL_IO.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\extract_located_events.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\flexwin_funcs.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\grids_paths.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\kurtogram.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\learn_kwin.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\obspyaux.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_dem_mayavi.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_locations.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_only_dem_mayavi.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\plot_slice_mayavi.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\pysacio.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\reloc_by_snr.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\run_PdF_waveloc.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\run_kurtogram.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\sub_PdF_waveloc.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\waveloc_funcs.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\PyProgs\deprecated\kurtogram\python\Fast_Kurtogram.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\examples\run_syn_example.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\examples\run_syn_resolution_example.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\examples\run_waveloc_example.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\examples\setup_examples.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\nll\BEL\network_center.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\nll\IJEN\network_center.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\scripts\run_PdF_test.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\scripts\run_syn_Emilia.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\scripts\run_syn_PdF.py
+RefactoringTool: D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\sphinx\conf.py
+RefactoringTool: There was 1 error:
+RefactoringTool: Can't parse D:\minPORT\20_SRC\SRC_REPOS\01_DEPS\waveloc\nll\LAQUILA\extract_used_stations.py: ParseError: bad input: type=9, value='[', context=('', (18, 49))
+
+D:\minPORT\10_SW\PFC\DEV\WPy_3890\python-3.8.9.amd64\Tools\scripts>

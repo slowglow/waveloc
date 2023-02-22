@@ -18,6 +18,6 @@ names=[line.split()[1] for line in lines ]
 cenlat=np.mean(deglats)
 cenlon=np.mean(deglons)
 
-print deglats, deglons, names
+print(deglats, deglons, names)
 
-print cenlat, cenlon
+print(cenlat, cenlon)

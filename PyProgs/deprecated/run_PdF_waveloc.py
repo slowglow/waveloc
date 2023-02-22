@@ -38,16 +38,16 @@ def main(options):
 
 
   if options.verbose: 
-    print ""
-    print "Input parameters:"
-    print "-----------------"
-    print "Grid        = %s"%(grid_filename_base)
-    print "Stations    = %s"%(stations_filename)
-    print "Data        = %s"%(os.path.join(data_dir,data_glob))
-    print ""
-    print "Output parameters:"
-    print "-----------------"
-    print "Out dir     = %s"%(output_dir)
+    print("")
+    print("Input parameters:")
+    print("-----------------")
+    print("Grid        = %s"%(grid_filename_base))
+    print("Stations    = %s"%(stations_filename))
+    print("Data        = %s"%(os.path.join(data_dir,data_glob)))
+    print("")
+    print("Output parameters:")
+    print("-----------------")
+    print("Out dir     = %s"%(output_dir))
     
 
   #raise UserWarning ('Stop here')
@@ -55,18 +55,18 @@ def main(options):
   #                       START PROCESSING 
   #######################################################################
 
-  print ""
-  print "----------------"
-  print "START PROCESSING"
-  print "----------------"
-  print ""
+  print("")
+  print("----------------")
+  print("START PROCESSING")
+  print("----------------")
+  print("")
 
   # Create Obspy streams for output
 
   #  ***** reading station file ******
 
   if options.verbose:
-    print "Reading station file"
+    print("Reading station file")
 
   if options.time:
     t_ref=time()
@@ -76,7 +76,7 @@ def main(options):
 
   if options.time:
     t=time()-t_ref
-    print "Time for reading %d stations from file : %.4f s\n" % (sta.nsta,t)
+    print("Time for reading %d stations from file : %.4f s\n" % (sta.nsta,t))
 
   datafile_list=glob.glob(os.path.join(data_dir,data_glob))
 
@@ -90,7 +90,7 @@ def main(options):
   # (interpolated from the full NLL files) so we can free up the memory as soon as possible
 
   if options.verbose:
-    print "Extracting useful travel-times"
+    print("Extracting useful travel-times")
 
   if options.time:
     t_ref=time()  
@@ -101,7 +101,7 @@ def main(options):
 
   if options.time:
     t=time()-t_ref
-    print "Time for extracting and saving %dx%dx%dx%d travel-times : %.2f s\n" % (time_grid.nx,time_grid.ny,time_grid.nz,cha.ncha,t)
+    print("Time for extracting and saving %dx%dx%dx%d travel-times : %.2f s\n" % (time_grid.nx,time_grid.ny,time_grid.nz,cha.ncha,t))
 
 
 

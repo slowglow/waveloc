@@ -29,7 +29,7 @@ def plotLocationWaveforms(loc, start_time, dt, data_dict, grad_dict, stack_wfm,
 
     t = np.arange(len(stack_wfm))*dt - (otime - start_time)
 
-    stations = data_dict.keys()
+    stations = list(data_dict.keys())
     stations.sort()
     n_traces = len(stations)+1
 
@@ -220,7 +220,7 @@ def plotDiracTest(test_info, fig_dir, otime_window):
     y = np.arange(ny)*dy
     z = (np.arange(nz)*dz+z_orig)*(-1)
     # setup of t-axis depends on type of stack_start_time
-    if type(stack_start_time) == float:
+    if isinstance(stack_start_time, float):
         t = np.arange(nt)*dt+stack_start_time
     else:
         t = np.arange(nt)*dt

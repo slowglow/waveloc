@@ -5,13 +5,13 @@ import glob
 import numpy as np
 
 from obspy.core import UTCDateTime
-from locations_trigger import read_locs_from_file
-from locations_prob import read_prob_locs_from_file
-from NllGridLib import read_hdr_file
-from hdf5_grids import get_interpolated_time_grids
-from migration import do_migration_loop_continuous
-from OP_waveforms import read_data_compatible_with_time_dict
-from plot_mpl import plotLocationGrid, plotLocationWaveforms, plotProbLoc
+from .locations_trigger import read_locs_from_file
+from .locations_prob import read_prob_locs_from_file
+from .NllGridLib import read_hdr_file
+from .hdf5_grids import get_interpolated_time_grids
+from .migration import do_migration_loop_continuous
+from .OP_waveforms import read_data_compatible_with_time_dict
+from .plot_mpl import plotLocationGrid, plotLocationWaveforms, plotProbLoc
 
 
 def do_plotting_setup_and_run(opdict, plot_wfm=True, plot_grid=True):
@@ -89,7 +89,7 @@ def do_plotting_setup_and_run(opdict, plot_wfm=True, plot_grid=True):
         z = loc['z_mean']
         # get the corresponding travel-times for time-shifting
         ttimes = {}
-        for sta in time_grids.keys():
+        for sta in list(time_grids.keys()):
             ttimes[sta] = time_grids[sta].value_at_point(x, y, z)
 
         tshift_migration = max(ttimes.values())
@@ -127,7 +127,7 @@ def do_plotting_setup_and_run(opdict, plot_wfm=True, plot_grid=True):
                                                     start_time_migration,
                                                     end_time_migration)
             # cut desired portion out of data
-            for sta in data_dict.keys():
+            for sta in list(data_dict.keys()):
                 tmp = data_dict[sta]
 
                 # alignment on origin time
@@ -197,7 +197,7 @@ def do_probloc_plotting_setup_and_run(opdict):
     f = h5py.File(problocgrid, 'r')
 
     # for each loc
-    for i in xrange(len(locs)):
+    for i in range(len(locs)):
         loc = locs[i]
         prob_loc = prob_locs[i]
 

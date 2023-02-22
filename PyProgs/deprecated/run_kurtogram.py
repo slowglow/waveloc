@@ -33,7 +33,7 @@ wf=Waveform()
 wf.read_from_file(options.data_file,starttime=tdeb,endtime=tfin)
 dt=wf.delta
 x=wf.values
-print(wf.stream)
+print((wf.stream))
 
 # set up parameters for kurtogram analysis
 N=len(x)

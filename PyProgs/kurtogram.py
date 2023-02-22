@@ -8,10 +8,10 @@ import numpy as np
 import scipy.signal as si
 import matplotlib.pyplot as plt
 from obspy.core import utcdatetime
-from locations_trigger import read_locs_from_file
-from correlation import BinaryFile
-from filters import smooth
-from OP_waveforms import Waveform
+from .locations_trigger import read_locs_from_file
+from .correlation import BinaryFile
+from .filters import smooth
+from .OP_waveforms import Waveform
 
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)s : %(asctime)s : %(message)s')
@@ -87,13 +87,13 @@ def plotKurtogram(Kwav, freq_w, nlevel, Level_w, Fs, fi, I):
     :type I: integer
     """
 
-    plt.imshow(Kwav, aspect='auto', extent=(0, freq_w[-1], range(2*nlevel)[-1],
-                                            range(2*nlevel)[0]),
+    plt.imshow(Kwav, aspect='auto', extent=(0, freq_w[-1], list(range(2*nlevel))[-1],
+                                            list(range(2*nlevel))[0]),
                interpolation='none', cmap=plt.cm.hot_r)
     #imgplot.set_cmap('gray')
     xx = np.arange(0, int(freq_w[len(freq_w)-1]), step=5)
     plt.xticks(xx)
-    plt.yticks(range(2*nlevel), np.round(Level_w*10)/10)
+    plt.yticks(list(range(2*nlevel)), np.round(Level_w*10)/10)
     plt.plot(Fs*fi,I,'yo')
     plt.xlabel("Frequency (Hz)")
     plt.ylabel("Level k")
@@ -920,7 +920,7 @@ def write_file(info, tstart, tend, tr):
     :returns: info
     """
 
-    print "Writing a new kurtosis file..."
+    print("Writing a new kurtosis file...")
     t_orig = info['tdeb']
     dt = info['dt']
     ind1 = int((tstart-t_orig)/dt)
@@ -1053,10 +1053,10 @@ def kurto(origin_time, info, opdict):
         info['filter'].append((0, 50))
 
     if verbose and snr > 3:
-        print "snr:", snr, " ; snr_ref:", snr_ref
-        print "snr new kurtosis:", snr_kurt, " ; snr kurtosis reference:",\
-            snr_kurt_ref
-        print "kurtosis max, kurt_ref :", kmax, kmax_ref
+        print("snr:", snr, " ; snr_ref:", snr_ref)
+        print("snr new kurtosis:", snr_kurt, " ; snr kurtosis reference:",\
+            snr_kurt_ref)
+        print("kurtosis max, kurt_ref :", kmax, kmax_ref)
         plot_trace(fig, G, x, x_filt, kurtx, new_kurtx, info, f_lower,
                    f_upper, snr, snr_ref, snr_kurt, kmax, kmax_ref,
                    origin_time)
@@ -1080,8 +1080,8 @@ def read_kurtogram_frequencies(filename):
     freqs = a.read_binary_file()
 
     for staname in sorted(freqs):
-        print "%s %.1f %.1f" % (staname, np.mean(freqs[staname][:, 0]),
-                                np.mean(freqs[staname][:, 1]))
+        print("%s %.1f %.1f" % (staname, np.mean(freqs[staname][:, 0]),
+                                np.mean(freqs[staname][:, 1])))
         fig = plt.figure()
         fig.set_facecolor('white')
         plt.hist([freqs[staname][:, 0], freqs[staname][:, 1]], 35,
@@ -1193,8 +1193,8 @@ def do_kurtogram_setup_and_run(opdict):
         for loc in locs:
             origin_time = loc['o_time']
             if opdict['verbose']:
-                print "******************************************************"
-                print logging.info(origin_time)
+                print("******************************************************")
+                print(logging.info(origin_time))
 
             if origin_time > tdeb and origin_time < tfin:
                 info = kurto(origin_time, info, opdict)
@@ -1212,7 +1212,7 @@ def do_kurtogram_setup_and_run(opdict):
 
     # Write the dictionnary 'param' in a binary file
     if os.path.isfile(kurto_file):
-        ans = raw_input('%s file already exists. Do you really want to replace\
+        ans = input('%s file already exists. Do you really want to replace\
 it ? (y or n):\n' % kurto_file)
         if ans != 'y':
             kurto_file = "%s_1" % kurto_file

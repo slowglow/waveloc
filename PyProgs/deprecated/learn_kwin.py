@@ -32,7 +32,7 @@ tr_len=len(tr1)
 
 misfits=[]
 k_factors=np.linspace(0.01,0.2,30)
-print k_factors
+print(k_factors)
 for k_factor in k_factors:
   k_rec=kwin*k_factor
 
@@ -50,4 +50,4 @@ for k_factor in k_factors:
   logging.info('misfit = %.3f'%misfit)
   misfits.append((k_factor,misfit))
 
-print misfits
+print(misfits)

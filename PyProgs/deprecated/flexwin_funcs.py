@@ -239,6 +239,6 @@ def unique_maxima(values,iMLR,separation):
     
 def print_iMLR(A,iMLR,b,dt):
   for (iM,iL,iR) in iMLR:
-    print "%.2f %.2f %.2f : %.2f"%(b+iL*dt,b+iM*dt,b+iR*dt,A[iM])
-  print "---"
+    print("%.2f %.2f %.2f : %.2f"%(b+iL*dt,b+iM*dt,b+iR*dt,A[iM]))
+  print("---")
   

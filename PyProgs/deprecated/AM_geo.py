@@ -181,6 +181,6 @@ if __name__=='__main__':
   #y=7650290 
 
   P=GeoPointXY(360212,7650290,2378,proj=p)
-  print P.lat, P.lon
+  print(P.lat, P.lon)
 
-  print P.dist_km_from(55.0, -21.0)
+  print(P.dist_km_from(55.0, -21.0))

@@ -6,12 +6,12 @@ import glob
 import h5py
 from obspy.core import utcdatetime, read
 from obspy.signal import trigger
-from OP_waveforms import Waveform
-from filters import smooth
+from .OP_waveforms import Waveform
+from .filters import smooth
 import matplotlib.pyplot as plt
 import numpy as np
 import logging
-from hdf5_grids import get_interpolated_time_grids
+from .hdf5_grids import get_interpolated_time_grids
 
 
 def plot_location_triggers(trace, trig_start, trig_end, trig_95_start,
@@ -81,14 +81,14 @@ def number_good_kurtosis_for_location(kurt_files, data_files, loc, time_dict,
     n_good_kurt = 0
     wf = Waveform()
 
-    for ifile in xrange(len(kurt_files)):
+    for ifile in range(len(kurt_files)):
         kfilename = kurt_files[ifile]
         dfilename = data_files[ifile]
 
         st = read(kfilename, headonly=True)
         staname = st.traces[0].stats.station
 
-        if staname in time_dict.keys():
+        if staname in list(time_dict.keys()):
             traveltime = time_dict[staname].value_at_point(stack_x, stack_y,
                                                            stack_z)
             start_time = o_time+traveltime-sn_time
@@ -319,7 +319,7 @@ def do_locations_trigger_setup_and_run(opdict):
                           loc['o_err_left'], loc['o_err_right'], loc['x_mean'],
                           loc['x_sigma'], loc['y_mean'], loc['y_sigma'],
                           loc['z_mean'], loc['z_sigma']))
-            loc_file.write(u"Max = %.2f, %s - %.2f s + %.2f s, x= %.4f pm %.4f\
+            loc_file.write("Max = %.2f, %s - %.2f s + %.2f s, x= %.4f pm %.4f\
                            km, y= %.4f pm %.4f km, z= %.4f pm %.4f km\n" %
                            (loc['max_trig'], loc['o_time'].isoformat(),
                             loc['o_err_left'], loc['o_err_right'],
@@ -394,13 +394,13 @@ def write_header_options(loc_file, opdict):
     """
 
     # Header of locations.dat
-    loc_file.write(u'#FILTER : %.1f - %.1f Hz\n' % (opdict['c1'],
+    loc_file.write('#FILTER : %.1f - %.1f Hz\n' % (opdict['c1'],
                                                     opdict['c2']))
-    loc_file.write(u'#KURTOSIS = window: %.2f s, recurs: %s, grad: %s, \
+    loc_file.write('#KURTOSIS = window: %.2f s, recurs: %s, grad: %s, \
                    gauss: %s\n' % (opdict['kwin'], opdict['krec'],
                                    opdict['kderiv'], opdict['gauss']))
-    loc_file.write(u'#OPTIONS = reloc: %s\n' % opdict['reloc'])
-    loc_file.write(u'#LOCATION = level: %d, window of analysis: %.2f s, \
+    loc_file.write('#OPTIONS = reloc: %s\n' % opdict['reloc'])
+    loc_file.write('#LOCATION = level: %d, window of analysis: %.2f s, \
                    kurtosis snr: %.2f, waveform snr: %.2f, number of \
                    stations: %d\n\n' % (opdict['loclevel'], opdict['sn_time'],
                                         opdict['snr_limit'],

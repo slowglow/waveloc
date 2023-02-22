@@ -49,7 +49,7 @@ def sw_kurtosis1(x, n):
     npts = len(x)
     xs = np.empty(npts-n+1, dtype=float)
     xs[:] = 0.
-    for i in xrange(n, npts - n):
+    for i in range(n, npts - n):
         xs[i] = ss.kurtosis(x[i:(i+n)])
     return xs
 
@@ -97,7 +97,7 @@ def rec_kurtosis_old(x, C):
     var_value = 0
     kurt_value = 0
     xs = np.empty(npts)
-    for i in xrange(npts):
+    for i in range(npts):
         mean_value = C*mean_value + (1-C)*x[i]
         var_value = C*var_value+(1-C)*(x[i]-mean_value)**2
         if var_value > varx:
@@ -133,7 +133,7 @@ def rec_kurtosis(x, C1):
     mu2_last = 1.0
     k4_bar_last = 0.0
 
-    for i in xrange(npts):
+    for i in range(npts):
         mu1 = a1*mu1_last + C1*x[i]
         dx2 = (x[i]-mu1_last)*(x[i]-mu1_last)
         mu2 = a1*mu2_last + C2*dx2
@@ -165,7 +165,7 @@ def rec_dx2(x, C1):
     mu1_last = 0
     mu2_last = 1
 
-    for i in xrange(npts):
+    for i in range(npts):
         mu1 = a1*mu1_last + C1*x[i]
         dx2 = (x[i]-mu1_last)*(x[i]-mu1_last)
         mu2 = a1*mu2_last + C2*dx2

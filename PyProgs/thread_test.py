@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-import Queue
+import queue
 import threading
 import time
 
@@ -14,9 +14,9 @@ class myThread (threading.Thread):
         self.name = name
         self.q = q
     def run(self):
-        print "Starting " + self.name
+        print("Starting " + self.name)
         process_data(self.name, self.q)
-        print "Exiting " + self.name
+        print("Exiting " + self.name)
 
 def process_data(threadName, q):
     while not exitFlag:
@@ -24,7 +24,7 @@ def process_data(threadName, q):
         if not workQueue.empty():
             data = q.get()
             queueLock.release()
-            print "%s processing %s" % (threadName, data)
+            print("%s processing %s" % (threadName, data))
         else:
             queueLock.release()
         time.sleep(1)
@@ -32,7 +32,7 @@ def process_data(threadName, q):
 threadList = ["Thread-1", "Thread-2", "Thread-3"]
 nameList = ["One", "Two", "Three", "Four", "Five"]
 queueLock = threading.Lock()
-workQueue = Queue.Queue(10)
+workQueue = queue.Queue(10)
 threads = []
 threadID = 1
 
@@ -59,4 +59,4 @@ exitFlag = 1
 # Wait for all threads to complete
 for t in threads:
     t.join()
-print "Exiting Main Thread"
+print("Exiting Main Thread")

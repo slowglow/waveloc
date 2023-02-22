@@ -206,7 +206,7 @@ class StationList(object):
     
     Name must be stripped of all whitespace to match station names in dictionary.
     """
-    A=[ (sta.name==name,sta_id) for sta_id,sta in self.stations.iteritems() ] 
+    A=[ (sta.name==name,sta_id) for sta_id,sta in self.stations.items() ] 
     A.sort()
     A.reverse()
     # Now the first element contains the station id for the name as the second element
@@ -227,7 +227,7 @@ class StationList(object):
         name_key=self.id_by_station_name(name)
         new_list.stations[name_key]=self.stations[name_key]
       except:
-        print "Station name %s not present in station list.  Ignoring." % name
+        print("Station name %s not present in station list.  Ignoring." % name)
       
     return new_list    
       
@@ -239,11 +239,11 @@ class StationList(object):
     
     file=open(filename,'w')
     if loc_type=='latlon':
-      for sta_id,sta in self.stations.iteritems():
+      for sta_id,sta in self.stations.items():
         file.write("GTSRCE %05s LATLON %10.4f %10.4f %4.1f %6.4f\n"%\
         (sta.name,sta.lat,sta.lon,sta.depth,sta.elev/1000.0))
     elif loc_type=='xy':
-      for sta_id,sta in self.stations.iteritems():
+      for sta_id,sta in self.stations.items():
         file.write("GTSRCE %05s XYZ %10.4f %10.4f %4.1f %6.4f\n"%\
         (sta.name,sta.x/1000.0,sta.y/1000.0,sta.depth,sta.elev/1000.0))
     else:
@@ -256,9 +256,9 @@ class StationList(object):
     write stations properties to screen
     """
     
-    for sta_id,sta in self.stations.iteritems():
-      print("%05s %10.4fN %10.4fE %10.1f %10.1f %4.1f %6.1f"%\
-      (sta.name,sta.lat,sta.lon,sta.x,sta.y,sta.depth,sta.elev))
+    for sta_id,sta in self.stations.items():
+      print(("%05s %10.4fN %10.4fE %10.1f %10.1f %4.1f %6.1f"%\
+      (sta.name,sta.lat,sta.lon,sta.x,sta.y,sta.depth,sta.elev)))
 
 
   
@@ -334,7 +334,7 @@ class ChannelList(object):
     
 
     # iterate through the stations list to populate channel list 
-    for sta_id,sta in station_list.stations.iteritems():
+    for sta_id,sta in station_list.stations.items():
       for comp in comp_string:
         cha_id=cha_id+1
         cha=Channel(sta,comp,locid)
@@ -346,7 +346,7 @@ class ChannelList(object):
     
     Station and component names must be stripped of all whitespace to match station names in dictionary.
     """
-    A=[ (cha.name==name and cha.comp==comp,cha_id) for cha_id,cha in self.channels.iteritems() ] 
+    A=[ (cha.name==name and cha.comp==comp,cha_id) for cha_id,cha in self.channels.items() ] 
     A.sort()
     A.reverse()
     # The first elements contain True or False statements, on which to choose the ids in the second elements.
@@ -381,7 +381,7 @@ class ChannelList(object):
     
     Station name must be stripped of all whitespace to match station names in dictionary.
     """
-    A=[ (cha.name==name,cha_id) for cha_id,cha in self.channels.iteritems() ] 
+    A=[ (cha.name==name,cha_id) for cha_id,cha in self.channels.items() ] 
     A.sort()
     A.reverse()
     # The first elements contain True or False statements, on which to choose the ids in the second elements.
@@ -443,42 +443,42 @@ class Grid(object):
   def _get_npts_(self):
     return len(self.points)
   def _get_min_lat_(self):
-    lats = [p.lat for p in self.points.values()]
+    lats = [p.lat for p in list(self.points.values())]
     return min(lats)
   def _get_max_lat_(self):
-    lats = [p.lat for p in self.points.values()]
+    lats = [p.lat for p in list(self.points.values())]
     return max(lats)
   def _get_min_lon_(self):
-    lons = [p.lon for p in self.points.values()]
+    lons = [p.lon for p in list(self.points.values())]
     return min(lons)
   def _get_max_lon_(self):
-    lons = [p.lon for p in self.points.values()]
+    lons = [p.lon for p in list(self.points.values())]
     return max(lons)
 
   def _get_min_x_(self):
-    xs = [p.x for p in self.points.values()]
+    xs = [p.x for p in list(self.points.values())]
     return min(xs)
   def _get_max_x_(self):
-    xs = [p.x for p in self.points.values()]
+    xs = [p.x for p in list(self.points.values())]
     return max(xs)
   def _get_min_y_(self):
-    ys = [p.y for p in self.points.values()]
+    ys = [p.y for p in list(self.points.values())]
     return min(ys)
   def _get_max_y_(self):
-    ys = [p.y for p in self.points.values()]
+    ys = [p.y for p in list(self.points.values())]
     return max(ys)
   def _get_min_z_(self):
-    zs = [p.z for p in self.points.values()]
+    zs = [p.z for p in list(self.points.values())]
     return min(zs)
   def _get_max_z_(self):
-    zs = [p.z for p in self.points.values()]
+    zs = [p.z for p in list(self.points.values())]
     return max(zs)
 
   def _get_min_value_(self):
-    vals = [p.value for p in self.points.values()]
+    vals = [p.value for p in list(self.points.values())]
     return min(vals)
   def _get_max_value_(self):
-    vals = [p.value for p in self.points.values()]
+    vals = [p.value for p in list(self.points.values())]
     return max(vals)
 
     
@@ -575,7 +575,7 @@ class Grid(object):
     
     # write the file
     file=open(filename,'w')
-    for point_id, point in self.points.iteritems():
+    for point_id, point in self.points.items():
       if loc_type=='latlon':
         file.write("%d  %10.5f %10.5f %10.5f\n"%(point_id,point.lon,point.lat,point.z))   
       elif loc_type=='xy':
@@ -599,7 +599,7 @@ class Grid(object):
     
     # append to file
     file=open(filename,'a')
-    for point_id, point in self.points.iteritems():
+    for point_id, point in self.points.items():
       if loc_type=='latlon':
         file.write("%d  %10.5f %10.5f %10.5f\n"%(point_id,point.lon,point.lat,point.z))   
       elif loc_type=='xy':
@@ -631,7 +631,7 @@ class Grid(object):
 
 
     # interpret line
-    print vals
+    print(vals)
     nx=int(vals[0])
     ny=int(vals[1])
     nz=int(vals[2])
@@ -692,7 +692,7 @@ class Grid(object):
       z=display_value*1000 # conversion in meters
 
       # order the points by distance to the display value
-      A=[( abs(p.z-z), p ) for p in self.points.values()]
+      A=[( abs(p.z-z), p ) for p in list(self.points.values())]
       A.sort()
 
       # retain only the points whose distance to the display value is within epsilon of the minimum distance
@@ -828,7 +828,7 @@ class Grid(object):
     # make simple lists of lons and lats
     lons=[]
     lats=[]
-    for point_id, point in self.points.iteritems():
+    for point_id, point in self.points.items():
         lons.append(point.lon)
         lats.append(point.lat)
     x,y = m(lons,lats)
@@ -1121,12 +1121,12 @@ class QDGrid(Grid):
     xarray=numpy.arange(self.nx)*self.dx+self.x_orig
     yarray=numpy.arange(self.ny)*self.dy+self.y_orig
 
-    print "Making plot grid"
+    print("Making plot grid")
     values=[self.value_at_point(x,y,z) for y in yarray for x in xarray]
     vals=array(values)
     vals.shape=(self.ny,self.nx)
 
-    print "Plotting grid to file %s"%filename
+    print("Plotting grid to file %s"%filename)
     pylab.clf()
     pylab.title(title)
     pylab.contourf(xarray,yarray,vals,cmap=pylab.cm.jet)
@@ -1139,12 +1139,12 @@ class QDGrid(Grid):
     zarray=numpy.arange(self.nz)*self.dz+self.z_orig
 
 
-    print "Making plot grid"
+    print("Making plot grid")
     values=[self.value_at_point(x,y,z) for z in zarray for x in xarray]
     vals=array(values)
     vals.shape=(self.nz,self.nx)
 
-    print "Plotting grid to file %s"%filename
+    print("Plotting grid to file %s"%filename)
     pylab.clf()
     pylab.title(title)
     pylab.contourf(xarray,zarray,vals,cmap=pylab.cm.jet)
@@ -1157,12 +1157,12 @@ class QDGrid(Grid):
     zarray=numpy.arange(self.nz)*self.dz+self.z_orig
 
 
-    print "Making plot grid"
+    print("Making plot grid")
     values=[self.value_at_point(x,y,z) for z in zarray for y in yarray]
     vals=array(values)
     vals.shape=(self.nz,self.ny)
 
-    print "Plotting grid to file %s"%filename
+    print("Plotting grid to file %s"%filename)
     pylab.clf()
     pylab.title(title)
     pylab.contourf(yarray,zarray,vals,25,cmap=pylab.cm.jet)
@@ -1222,7 +1222,7 @@ class QDTimeGrid(QDGrid):
     # read all the full-resolution NLL time files
     logging.debug('Reading full-resolution NLL time files')
     logging.debug('Channels contains %d channels'%len(channel_list.channels))
-    for s in channel_list.channels.values():
+    for s in list(channel_list.channels.values()):
       try:
         nll_grid_name="%s.%s.time"%(grid_filename_base,s.name)
         grid=QDGrid()
@@ -1236,13 +1236,13 @@ class QDTimeGrid(QDGrid):
 
     # set up smaller time grid on search grid only
     logging.info('Setting up local grid. This could take some time, be patient...')
-    grid_ids=time_grids.keys()
+    grid_ids=list(time_grids.keys())
     logging.debug("Grid keys : ")
     logging.debug(grid_ids)
     
-    ixarray=range(self.nx)
-    iyarray=range(self.ny)
-    izarray=range(self.nz)
+    ixarray=list(range(self.nx))
+    iyarray=list(range(self.ny))
+    izarray=list(range(self.nz))
 
 
     # by default do not calculate grids
@@ -1257,7 +1257,7 @@ class QDTimeGrid(QDGrid):
       try:
         self.load_buffer_from_file(tmp_buf_filename)
         logging.debug("Loaded grid keys:")
-        logging.debug(self.buf[0].keys())
+        logging.debug(list(self.buf[0].keys()))
       except IOError:
         logging.info('Cannot load file %s : calculating grid and writing to file.'%tmp_buf_filename)
         calculate_grids=True
@@ -1307,7 +1307,7 @@ class QDTimeGrid(QDGrid):
     # read all the full-resolution NLL time files
     logging.debug('Reading full-resolution NLL time files')
     logging.debug('Channels contains %d channels'%len(channel_list.channels))
-    for s in channel_list.channels.values():
+    for s in list(channel_list.channels.values()):
       try:
         nll_grid_name="%s.%s.time"%(grid_filename_base,s.name)
         grid=QDGrid()
@@ -1325,11 +1325,11 @@ class QDTimeGrid(QDGrid):
 
     # set up smaller time grid on search grid only
     logging.info('Setting up local grid. This could take some time, be patient...')
-    grid_ids=time_grids.keys()
+    grid_ids=list(time_grids.keys())
     
-    ixarray=range(self.nx)
-    iyarray=range(self.ny)
-    izarray=range(self.nz)
+    ixarray=list(range(self.nx))
+    iyarray=list(range(self.ny))
+    izarray=list(range(self.nz))
 
 
     self.construct_empty_grid()
@@ -1375,8 +1375,8 @@ class QDCorrGrid(QDGrid):
 
   def set_grid_value(self,ix,iy,iz,value=[]):
     ib=ix*self.ny*self.nz + iy*self.nz + iz
-    print self.buf[ib].shape
-    print numpy.array(value).shape
+    print(self.buf[ib].shape)
+    print(numpy.array(value).shape)
     self.buf[ib]=numpy.array(value)
 
   def write_grid_timeslice(self,itime,filename):
@@ -1481,7 +1481,7 @@ class CorrGrid(Grid):
     self.points={}
     
     # iterate over points in the base_grid
-    for grid_id,point in self.base_grid.points.iteritems():
+    for grid_id,point in self.base_grid.points.items():
       
       # extract the number of keys and the summed cross-correlation vector from the
       # cross-correlation matrix using the path indicated by sta_grid.corr_keys for
@@ -1528,7 +1528,7 @@ class CorrGrid(Grid):
       [(point_latitude, point_longitude, cross_correlation)]
     """
     
-    corr_at_timestep=[(p.lat,p.lon,p.value[t_index]) for p in self.points.values()]
+    corr_at_timestep=[(p.lat,p.lon,p.value[t_index]) for p in list(self.points.values())]
     return corr_at_timestep
  
  
@@ -1606,7 +1606,7 @@ class CorrGrid(Grid):
     if data_list:
       sta_lat=[]
       sta_lon=[]
-      for sta_key in data_list.data.keys():
+      for sta_key in list(data_list.data.keys()):
          sta_lat.append(data_list.cha_list.channels[sta_key].lat)
          sta_lon.append(data_list.cha_list.channels[sta_key].lon)
          #sta_lat.append(data_list.sta_list.stations[sta_key].lat)
@@ -1671,7 +1671,7 @@ class CorrGrid(Grid):
     self.max_corr=[]
     x=numpy.zeros(self.n_timelags)
     for t_index in range(self.n_timelags): 
-      corr_at_timestep=[(p.value[t_index],p.lat,p.lon) for p in self.points.values()] 
+      corr_at_timestep=[(p.value[t_index],p.lat,p.lon) for p in list(self.points.values())] 
       max_corr=max(corr_at_timestep) 
       self.max_corr.append(GeoPointLL(max_corr[1],max_corr[2],value=max_corr[0]))
       x[t_index]=max_corr[0]
@@ -1795,25 +1795,25 @@ class CorrGrid(Grid):
     
     
     iMLR=setup_MLR(A,i_maxima,i_minima,w_level,c1*t_kurtosis/self.dt,c2*w_level)
-    print("After setup : %d maxima\n")%(len(iMLR))
+    print(("After setup : %d maxima\n")%(len(iMLR)))
    
     iMLR_w=reject_on_water_level(A,iMLR,i_minima,c0*w_level)
-    print("After water level rejection : %d maxima\n")%(len(iMLR_w))
+    print(("After water level rejection : %d maxima\n")%(len(iMLR_w)))
    
     iMLR_c=reject_on_center_maximum(A,iMLR_w,i_maxima)
-    print("After center maximum rejection : %d maxima\n")%(len(iMLR_c))
+    print(("After center maximum rejection : %d maxima\n")%(len(iMLR_c)))
     #print_iMLR(A,iMLR_c,self.b,self.dt)
         
     iMLR_s=reject_on_separation(A,iMLR_c,i_maxima,i_minima,c3a,c3b*t_kurtosis/self.dt)
-    print("After separation rejection : %d maxima\n")%(len(iMLR_s))
+    print(("After separation rejection : %d maxima\n")%(len(iMLR_s)))
     #print_iMLR(A,iMLR_s,self.b,self.dt)
     
     iMLR=remove_subwindows(A,iMLR_s,t_kurtosis/self.dt)
-    print("After subwindow rejection : %d maxima\n")%(len(iMLR))
+    print(("After subwindow rejection : %d maxima\n")%(len(iMLR)))
     #print_iMLR(A,iMLR,self.b,self.dt)
         
     max_indexes=unique_maxima(A,iMLR,t_kurtosis/self.dt)
-    print("After removal of duplicates : %d maxima\n")%(len(max_indexes))
+    print(("After removal of duplicates : %d maxima\n")%(len(max_indexes)))
      
     # the indexes of the true maxima are now in max_indexes
     # put the corresponding points (with times) in self.locations 
@@ -1973,7 +1973,7 @@ class CorrGrid(Grid):
     
     file_value=open(filename_value,'wb')
         
-    for key,point in self.points.iteritems():
+    for key,point in self.points.items():
       file_key.write("%d %.4f %.4f\n"%(key,point.lat,point.lon))
       point.value.tofile(file_value)
     
@@ -2050,8 +2050,8 @@ class Grid_Sta_GF_List(object):
     self.associations=[]
     try:
       # iterate through grid points and stations and select the correct gfns
-      for grid_id,point in grid.points.iteritems():
-        for cha_id,cha  in cha_list.channels.iteritems():
+      for grid_id,point in grid.points.items():
+        for cha_id,cha  in cha_list.channels.items():
           # call the appropriate selection routine
           ok=False
           if type=='Maxdist':
@@ -2110,7 +2110,7 @@ class Grid_Sta_GF_List(object):
       # make these keys fixed length, so they can be written to a binary file 
       # and retrieved correctly
       corr_key="(%04d,%04d)"%(gf_id,sta_id)
-      if self.corr_keys.has_key(grid_id): # if this grid point is already in the dictionary
+      if grid_id in self.corr_keys: # if this grid point is already in the dictionary
         self.corr_keys[grid_id].append(corr_key) # append this key
       else:
         self.corr_keys[grid_id]=[corr_key] # create a list with this key as first element

@@ -1,7 +1,7 @@
 import os
 import unittest
 import numpy as np
-from NllGridLib import latlon2rect, rect2latlon, read_hdr_file,\
+from .NllGridLib import latlon2rect, rect2latlon, read_hdr_file,\
     read_stations_file
 
 

@@ -39,7 +39,7 @@ demx=numpy.array(dem['XIsub']).flatten()/1000.0
 demy=numpy.array(dem['YIsub']).flatten()/1000.0
 demz=numpy.array(dem['ZIsub']).flatten()/1000.0
 
-print "Read DEM"
+print("Read DEM")
 
 # data 
 data_glob = "*2010-10-14T00:15:40.98*.dat"
@@ -49,19 +49,19 @@ hdr_file="%s/grid.500m.search.hdr"%lib_path
 
 # creat the object to contain the stations
 pd = tvtk.PolyData()
-pd.points = [[s.x/1000.0, s.y/1000.0, -s.elev/1000.0] for s in sta.stations.values()]
+pd.points = [[s.x/1000.0, s.y/1000.0, -s.elev/1000.0] for s in list(sta.stations.values())]
 
 # create the DEM
 dem_data=tvtk.PolyData()
 dem_data.points = numpy.array([demx, demy, demz]).T
 
 for data_file in data_files : 
-  print data_file
+  print(data_file)
   data=QDGrid()
   data.read_NLL_hdr_file(hdr_file)
   data.buf=numpy.fromfile(data_file, dtype=numpy.int16)
   data.buf=numpy.array(data.buf, dtype=numpy.float)
-  print data.buf.min(), data.buf.max()
+  print(data.buf.min(), data.buf.max())
   data.buf.shape = (data.nx, data.ny, data.nz)
   max_ib=numpy.argmax(data.buf)
   ix,iy,iz=data.get_ix_iy_iz(max_ib)

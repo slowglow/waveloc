@@ -45,7 +45,7 @@ data_files.sort()
 
 station_names=[data_file.split(os.sep)[-1].split('.')[0] for data_file in data_files]
 
-print station_names
+print(station_names)
 
 for sta in station_names:
   subdir=extract_path + os.sep + sta
@@ -88,7 +88,7 @@ for loc in locs[0:1]:
     data_file=data_files[ifile]
     base_file_name=data_file.split(os.sep)[-1]
     outfilename=extract_path + os.sep + sta + os.sep + base_file_name + '_'+stack_time.isoformat()
-    print outfilename
+    print(outfilename)
     st=read(data_files[ifile],starttime=start_time, endtime=end_time)
     tr=st.traces[0]
     tr.write(outfilename,format='SAC')

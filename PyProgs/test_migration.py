@@ -4,9 +4,9 @@ import h5py
 import logging
 import unittest
 import numpy as np
-from options import WavelocOptions
-from migration import do_migration_setup_and_run
-from synth_migration import generateSyntheticDirac
+from .options import WavelocOptions
+from .migration import do_migration_setup_and_run
+from .synth_migration import generateSyntheticDirac
 
 
 def suite():
@@ -70,7 +70,7 @@ def hdf5_max_values(filename):
 class SyntheticMigrationTests(unittest.TestCase):
 
     def test_dirac_migration(self):
-        from locations_trigger import trigger_locations_inner
+        from .locations_trigger import trigger_locations_inner
 
         wo = WavelocOptions()
         wo.set_test_options()

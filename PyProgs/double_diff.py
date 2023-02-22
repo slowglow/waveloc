@@ -11,11 +11,11 @@ import logging
 
 from obspy.core import utcdatetime
 
-from locations_trigger import read_locs_from_file, read_header_from_file, \
+from .locations_trigger import read_locs_from_file, read_header_from_file, \
     write_header_options
-from correlation import BinaryFile
-from NllGridLib import read_stations_file, read_hdr_file
-from hdf5_grids import get_interpolated_time_grids
+from .correlation import BinaryFile
+from .NllGridLib import read_stations_file, read_hdr_file
+from .hdf5_grids import get_interpolated_time_grids
 
 
 def traveltimes(x, y, z, t_orig, stations, time_grids):
@@ -45,7 +45,7 @@ def traveltimes(x, y, z, t_orig, stations, time_grids):
     arr_times = {}
 
     for staname in sorted(stations):
-        if not staname in time_grids.keys():
+        if not staname in list(time_grids.keys()):
             logging.info("%s station not in time_grids" % staname)
             continue
         t_th[staname] = []
@@ -121,9 +121,9 @@ def fill_matrix(cluster, x, y, z, t_orig, stations, t_th, t_arr, coeff, delay,
     nline, num = 0, 0
 
     for staname in sorted(stations):
-        if not staname in delay.keys():
+        if not staname in list(delay.keys()):
             continue
-        if not staname in t_th.keys():
+        if not staname in list(t_th.keys()):
             continue
         coord = [stations[staname]['x'], stations[staname]['y'],
                  -stations[staname]['elev']]
@@ -261,7 +261,7 @@ def plot_events(cluster, locs, stations, x, y, z, i, threshold, nbmin, area,
     :type nbsta: numpy array
     """
     from mayavi import mlab
-    from CZ_color import CZ_W_2_color
+    from .CZ_color import CZ_W_2_color
 
     # Stations coordinates
     xsta, ysta, zsta = [], [], []
@@ -432,8 +432,8 @@ def do_double_diff_setup_and_run(opdict):
 
     # ------------------------------------------------------------------------
     # Iterate over clusters
-    for i in cluster.keys():
-        print "CLUSTER %d:" % i, cluster[i], len(cluster[i])
+    for i in list(cluster.keys()):
+        print("CLUSTER %d:" % i, cluster[i], len(cluster[i]))
         N = len(cluster[i])
 
         # Hypocentral parameters to be changed
@@ -461,7 +461,7 @@ def do_double_diff_setup_and_run(opdict):
                                          arr_times)
 
         if verbose:
-            from clustering import compute_nbsta
+            from .clustering import compute_nbsta
             nbsta = compute_nbsta(len(locs), coeff, threshold)
             plot_events(cluster, locs, stations, x, y, z, i, threshold, nbmin,
                         area, nbsta)

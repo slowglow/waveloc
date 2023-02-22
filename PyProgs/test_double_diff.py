@@ -1,5 +1,5 @@
 import unittest
-from double_diff import do_double_diff, coord_cluster
+from .double_diff import do_double_diff, coord_cluster
 from obspy.core import utcdatetime
 import numpy as np
 
@@ -112,7 +112,7 @@ class SyntheticsDoubleDiffTests(unittest.TestCase):
         self.atimes_true = {}
         self.ttimes_mes = {}
         self.atimes_mes = {}
-        for staname in self.sta.keys():
+        for staname in list(self.sta.keys()):
             xsta = self.sta[staname]['x']
             ysta = self.sta[staname]['y']
             zsta = -self.sta[staname]['elev']   # positive z-axis downwards
@@ -136,7 +136,7 @@ class SyntheticsDoubleDiffTests(unittest.TestCase):
 
         self.coeff = {}
         self.delay = {}
-        for staname in self.sta.keys():
+        for staname in list(self.sta.keys()):
             self.coeff[staname] = np.zeros((self.N,  self.N))
             up_tr = np.triu_indices(self.N)
             self.coeff[staname][up_tr] = 1

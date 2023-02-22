@@ -23,7 +23,7 @@ import logging
 
 import matplotlib.pyplot as plt
 
-from filters import sw_kurtosis1, smooth, rec_kurtosis_old
+from .filters import sw_kurtosis1, smooth, rec_kurtosis_old
 
 from obspy.core import read, utcdatetime, stream, Stream
 from obspy.signal import cosTaper, filter, trigger
@@ -414,7 +414,7 @@ class Waveform(object):
         st.merge(method=1, fill_value=fill_value)
         for tr in st:
             tr.data = tr.data.astype('float32')
-            tr.stats.mseed.encoding = u'FLOAT32'
+            tr.stats.mseed.encoding = 'FLOAT32'
 
         st.write(filename, format)
 
@@ -433,7 +433,7 @@ class Waveform(object):
 
         for tr in st:
             tr.data = tr.data.astype('int32')
-            tr.stats.mseed.encoding = u'INT32'
+            tr.stats.mseed.encoding = 'INT32'
         self.stream.write(filename, format)
 
     def rmean(self):
@@ -963,7 +963,7 @@ def read_data_compatible_with_time_dict(filenames, time_dict, starttime,
     if len(u) > 1:
         logging.error('Sampling frequency differs between stations.  Fix this\
                        before migrating.')
-        for i in xrange(len(deltas)):
+        for i in range(len(deltas)):
             logging.error('Delta %.4f for file %s' % (deltas[i], filenames[i]))
         raise UserWarning
 

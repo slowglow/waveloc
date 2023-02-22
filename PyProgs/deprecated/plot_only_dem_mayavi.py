@@ -24,7 +24,7 @@ from grids_paths import QDGrid, StationList
 
 base_path=os.getenv('WAVELOC_PATH')
 lib_path="%s/lib"%base_path
-print lib_path
+print(lib_path)
 
 
 # stations
@@ -44,7 +44,7 @@ hdr_file="%s/grid.500m.search.hdr"%lib_path
 
 # creat the object to contain the stations
 pd = tvtk.PolyData()
-pd.points = [[s.x/1000.0, s.y/1000.0, -s.elev/1000.0] for s in sta.stations.values()]
+pd.points = [[s.x/1000.0, s.y/1000.0, -s.elev/1000.0] for s in list(sta.stations.values())]
 
 # create the DEM
 dem_data=tvtk.PolyData()

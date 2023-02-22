@@ -11,10 +11,10 @@ from obspy.core import utcdatetime
 from itertools import count, islice
 from time import time
 
-from OP_waveforms import read_data_compatible_with_time_dict
-from NllGridLib import read_hdr_file
-from hdf5_grids import get_interpolated_time_grids
-from filters import smooth
+from .OP_waveforms import read_data_compatible_with_time_dict
+from .NllGridLib import read_hdr_file
+from .hdf5_grids import get_interpolated_time_grids
+from .filters import smooth
 
 
 def do_migration_setup_and_run(opdict):
@@ -95,12 +95,12 @@ def do_migration_setup_and_run(opdict):
         grid_info = read_hdr_file(search_grid_filename)
 
         # do migration if have enough data (3 is bare minimum)
-        if len(data.keys()) >= 3:
+        if len(list(data.keys())) >= 3:
             logging.info("Migrating data : %s - %s." % (start_time.isoformat(),
                                                         end_time.isoformat()))
             do_migration_loop_continuous(opdict, data, delta, start_time,
                                          grid_info, time_grids)
-        elif len(data.keys()) == 0:
+        elif len(list(data.keys())) == 0:
             logging.warn('No data found between %s and %s.' %
                          (start_time.isoformat(), end_time.isoformat()))
         else:
@@ -133,7 +133,7 @@ def do_migration_loop_continuous(opdict, data, delta, start_time, grid_info,
     ny = grid_info['ny']
     nz = grid_info['nz']
     n_buf = nx*ny*nz
-    min_npts = min([len(data[key]) for key in data.keys()])
+    min_npts = min([len(data[key]) for key in list(data.keys())])
 
     dx = grid_info['dx']
     dy = grid_info['dy']
@@ -216,7 +216,7 @@ def do_migration_loop_continuous(opdict, data, delta, start_time, grid_info,
             f = h5py.File(grid_filename, 'w')
             sg = f.create_dataset('stack_grid', data=stack_grid)
         # add useful attributes to the hdf5 dataset
-        for key, value in grid_info.iteritems():
+        for key, value in grid_info.items():
             sg.attrs[key] = value
         sg.attrs['dt'] = delta
         sg.attrs['start_time'] = stack_start_time.isoformat()
@@ -256,7 +256,7 @@ def migrate_4D_stack(data, delta, time_grids, stack_grid, use_ram=False):
     # save the list of data keys
     # note : keys of data are all included in keys of time_grid, but there may
     # be more times than data
-    wf_ids = data.keys()
+    wf_ids = list(data.keys())
     n_wf_ids = len(wf_ids)
 
     n_buf, min_npts = stack_grid.shape

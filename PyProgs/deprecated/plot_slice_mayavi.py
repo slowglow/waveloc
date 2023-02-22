@@ -39,7 +39,7 @@ def plot_slice_mayavi(dat_filename,output_file,hyp_x,hyp_y,hyp_z,search_grid_fil
 
   # create the object to contain the stations
   pd = tvtk.PolyData()
-  pd.points = [[s.x/1000.0, s.y/1000.0, -s.elev/1000.0] for s in sta.stations.values()]
+  pd.points = [[s.x/1000.0, s.y/1000.0, -s.elev/1000.0] for s in list(sta.stations.values())]
 
   # create the object to contain the stations
   try:
@@ -49,12 +49,12 @@ def plot_slice_mayavi(dat_filename,output_file,hyp_x,hyp_y,hyp_z,search_grid_fil
     pass
 
   # read the dat file
-  print dat_filename
+  print(dat_filename)
   data=QDGrid()
   data.read_NLL_hdr_file(hdr_file)
   data.buf=numpy.fromfile(dat_filename, dtype=numpy.int16)
   max_ib=numpy.argmax(data.buf)
-  print max_ib
+  print(max_ib)
   max_val=data.buf[max_ib]
   ix,iy,iz=data.get_ix_iy_iz(max_ib)
   #data.buf=numpy.array(data.buf, dtype=numpy.float)

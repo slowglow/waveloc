@@ -157,7 +157,7 @@ def doResolutionTest(wo, grid_info, filename, loclevel=10.0,
     dt_grid[...] = -999.0
 
     # iterate over points
-    for ib_dec in xrange(nb_dec):
+    for ib_dec in range(nb_dec):
         ix_dec, iy_dec, iz_dec = np.unravel_index(ib_dec,
                                                   (nx_dec, ny_dec, nz_dec))
         # reconstruct the indexes in the original grid
@@ -174,7 +174,7 @@ def doResolutionTest(wo, grid_info, filename, loclevel=10.0,
 
         # do analysis for this point
         n_locs, best_dist, best_dt, trig_loc = analyseLocs(locs, wo, test_info)
-        print ix, iy, iz, n_locs, best_dist, best_dt
+        print(ix, iy, iz, n_locs, best_dist, best_dt)
 
         # save into array
         dist_grid[ib_dec] = best_dist
@@ -188,7 +188,7 @@ def doResolutionTest(wo, grid_info, filename, loclevel=10.0,
     f_dist = f.create_dataset('dist_grid', data=dist_grid)
     f_nloc = f.create_dataset('nloc_grid', data=nloc_grid)
     f_dt = f.create_dataset('dt_grid', data=dt_grid)
-    for key, value in dec_grid_info.iteritems():
+    for key, value in dec_grid_info.items():
         f_dist.attrs[key] = value
         f_nloc.attrs[key] = value
         f_dt.attrs[key] = value
@@ -239,7 +239,7 @@ def plotResolutionTest(wo, hdf_filename, plot_filename):
     sta_x = np.empty(len(stations), dtype='float32')
     sta_y = np.empty(len(stations), dtype='float32')
     i = 0
-    for key, value in stations.iteritems():
+    for key, value in stations.items():
         if value['loc_type'] == 'XYZ':
             sta_x[i] = value['x']-x_orig
             sta_y[i] = value['y']-y_orig
@@ -261,7 +261,7 @@ def plotResolutionTest(wo, hdf_filename, plot_filename):
 
     col = plt.cm.jet
     # iterate over iz
-    for iz in xrange(nz):
+    for iz in range(nz):
         plt.clf()
         plt.figure(figsize=(10, 4.5))
 

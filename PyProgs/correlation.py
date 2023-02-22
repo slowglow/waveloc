@@ -7,12 +7,12 @@ Provides classes and functions for cross-correlation.
 import os
 import glob
 import time
-import cPickle
+import pickle
 import logging
 import matplotlib.pyplot as plt
 import numpy as np
-from OP_waveforms import Waveform
-from locations_trigger import read_locs_from_file
+from .OP_waveforms import Waveform
+from .locations_trigger import read_locs_from_file
 
 
 class BinaryFile(object):
@@ -36,7 +36,7 @@ class BinaryFile(object):
         :returns: data read from tile
         """
         with open(self.filename, 'rb') as test:
-            my_depickler = cPickle.Unpickler(test)
+            my_depickler = pickle.Unpickler(test)
             result = my_depickler.load()
             test.close()
         return result
@@ -48,7 +48,7 @@ class BinaryFile(object):
         :param input: input data ready to be pickled
         """
         with open(self.filename, 'wb') as test:
-            my_pickler = cPickle.Pickler(test)
+            my_pickler = pickle.Pickler(test)
             my_pickler.dump(input)
             test.close()
 
@@ -193,7 +193,7 @@ def cum(x,v):
     """
 
     s = np.cumsum(x)
-    p = np.polyfit(range(len(x)), s, deg=1)
+    p = np.polyfit(list(range(len(x))), s, deg=1)
     line = p[0]*np.arange(len(x))+p[1]
     l = s-line
 
@@ -440,9 +440,9 @@ def do_correlation_setup_and_run(opdict):
                             tau_f = tau
                             plot_waveform(val1, val2, dt, [tau_t, tau_f],
                                           event, compteur)
-                            print "time: %.4f, %.4f" % (value, tau_t)
-                            print "frequency : %.4f, %.4f" % (value, tau_f)
-                            print "final delay : %.4f" % tau
+                            print("time: %.4f, %.4f" % (value, tau_t))
+                            print("frequency : %.4f, %.4f" % (value, tau_f))
+                            print("final delay : %.4f" % tau)
                             plt.show()
 
                     liste.append(round(value*10**2)/10**2)
@@ -455,7 +455,7 @@ def do_correlation_setup_and_run(opdict):
             delay[name].append(list_tau)
 
     # finished run, print timing info
-    print "Elapsed time: ", time.time()-tref
+    print("Elapsed time: ", time.time()-tref)
 
     # Save the results in 2 binary files
     logging.info("Saving coeff and delay files")

@@ -2,7 +2,7 @@ import h5py
 import os
 import logging
 import numpy as np
-from NllGridLib import read_hdr_file
+from .NllGridLib import read_hdr_file
 
 """
 Contains wrapper classes to easily manipulate hdf5 files.
@@ -61,7 +61,7 @@ class H5SingleGrid(object):
 
             if not grid_info is None:
                 self.grid_info = self.grid_data.attrs
-                for key, value in grid_info.iteritems():
+                for key, value in grid_info.items():
                     self.grid_info[key] = value
 
     def __del__(self):
@@ -251,7 +251,7 @@ class H5SingleGrid(object):
         # overwritten
         f = h5py.File(new_filename, 'w')
         buf = f.create_dataset('grid_data', (nx*ny*nz, ), 'f')
-        for key, value in new_grid_info.iteritems():
+        for key, value in new_grid_info.items():
             buf.attrs[key] = value
 
         #initialize new buffer
@@ -260,11 +260,11 @@ class H5SingleGrid(object):
         new_z = np.arange(nz)*dz+z_orig
 
         # loop doing interpolation
-        for ix in xrange(nx):
+        for ix in range(nx):
             x = new_x[ix]
-            for iy in xrange(ny):
+            for iy in range(ny):
                 y = new_y[iy]
-                for iz in xrange(nz):
+                for iz in range(nz):
                     z = new_z[iz]
                     buf[np.ravel_multi_index((ix, iy, iz), (nx, ny, nz))] = \
                         self.value_at_point(x, y, z)
@@ -330,7 +330,7 @@ def get_interpolated_time_grids(opdict):
     :param opdict: Dictionary of options in WavelocOptions.opdict format
     """
     import glob
-    from NllGridLib import read_hdr_file
+    from .NllGridLib import read_hdr_file
 
     base_path = opdict['base_path']
     full_time_grids = glob.glob(os.path.join(base_path, 'lib',
@@ -372,7 +372,7 @@ def get_interpolated_time_grids(opdict):
             full_grid = H5SingleGrid(f_timegrid)
             # copy the common part of the grid info
             new_info = {}
-            for name, value in full_grid.grid_info.iteritems():
+            for name, value in full_grid.grid_info.items():
                 new_info[name] = value
             # set the new part of the grid info to correspond to the search
             # grid

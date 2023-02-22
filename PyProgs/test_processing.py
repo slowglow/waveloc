@@ -2,9 +2,9 @@ import unittest
 import os
 import glob
 import numpy as np
-from SDS_processing import do_SDS_processing_setup_and_run
-from OP_waveforms import Waveform
-from options import WavelocOptions
+from .SDS_processing import do_SDS_processing_setup_and_run
+from .OP_waveforms import Waveform
+from .options import WavelocOptions
 
 
 def suite():
@@ -32,7 +32,7 @@ def waveforms_to_signature(base_path, datadir, dataglob, output_filename):
 class KurtosisTests(unittest.TestCase):
 
     def test_ss_kurtosis(self):
-        from filters import sw_kurtosis1, sw_kurtosis2
+        from .filters import sw_kurtosis1, sw_kurtosis2
 
         npts = 1000
         nkurt = 7
@@ -44,13 +44,13 @@ class KurtosisTests(unittest.TestCase):
         k1 = sw_kurtosis1(sig, nkurt)
         k2 = sw_kurtosis2(sig, nkurt)
 
-        self.assertEquals(k1.shape, k2.shape)
+        self.assertEqual(k1.shape, k2.shape)
         np.testing.assert_allclose(k1, k2, 5)
-        self.assertAlmostEquals(np.max(k1), np.max(k2))
-        self.assertEquals(np.argmax(k1), np.argmax(k2))
+        self.assertAlmostEqual(np.max(k1), np.max(k2))
+        self.assertEqual(np.argmax(k1), np.argmax(k2))
 
     def test_rec_kurtosis(self):
-        from filters import rec_kurtosis
+        from .filters import rec_kurtosis
 
         npts = 100000
         w = 3.0
@@ -63,7 +63,7 @@ class KurtosisTests(unittest.TestCase):
         C = dt/w
 
         k = rec_kurtosis(x, C)
-        self.assertAlmostEquals(np.mean(k), 0.0, 1)
+        self.assertAlmostEqual(np.mean(k), 0.0, 1)
 
 
 class ProcessingTests(unittest.TestCase):
@@ -75,7 +75,7 @@ class ProcessingTests(unittest.TestCase):
         self.wo.verify_SDS_processing_options()
 
     def test_positive_gradient(self):
-        from OP_waveforms import stream_positive_derivative
+        from .OP_waveforms import stream_positive_derivative
         from obspy.core import read
 
         base_path = self.wo.opdict['base_path']
@@ -97,16 +97,16 @@ class ProcessingTests(unittest.TestCase):
         np.testing.assert_almost_equal(tr.data[20:100], dy_exp[20:100], 2)
 
     def test_channel_read(self):
-        from SDS_processing import read_channel_file
+        from .SDS_processing import read_channel_file
 
         base_path = self.wo.opdict['base_path']
 
         filename = os.path.join(base_path, 'lib', 'test_channel_file')
         triplet_list = read_channel_file(filename)
 
-        self.assertEquals(len(triplet_list), 4)
-        self.assertEquals(triplet_list[0][1], 'ECH')
-        self.assertEquals(triplet_list[-1][2], 'UHZ')
+        self.assertEqual(len(triplet_list), 4)
+        self.assertEqual(triplet_list[0][1], 'ECH')
+        self.assertEqual(triplet_list[-1][2], 'UHZ')
 
     def test_processing(self):
 
@@ -130,7 +130,7 @@ class ProcessingTests(unittest.TestCase):
         lines.sort()
         expected_lines.sort()
         nlines = len(lines)
-        for i in xrange(nlines) :
+        for i in range(nlines) :
             line = lines[i]
             exp_line = expected_lines[i]
             self.assertSequenceEqual(line.split()[0], exp_line.split()[0])

@@ -163,7 +163,7 @@ def do_migration_loop_reloc(start_time, end_time, output_dir, kurtosis_filenames
 
   # Set the global variable delta (dt for all the seismograms)
   try:
-    delta=data.values()[0].delta
+    delta=list(data.values())[0].delta
   except IndexError:
     raise UserWarning("File list empty - check --dataglob option")
 
@@ -199,7 +199,7 @@ def do_migration_loop_plot(start_time, end_time, o_time, grid_dir, kurtosis_file
 
   # Set the global variable delta (dt for all the seismograms)
   try:
-    delta=data.values()[0].delta
+    delta=list(data.values())[0].delta
   except IndexError:
     raise UserWarning("File list empty - check --dataglob option")
 

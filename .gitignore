@@ -25,3 +25,4 @@ MANIFEST
 /build/
 /dist/
 _build
+*.py.bak

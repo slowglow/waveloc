@@ -141,13 +141,13 @@ def GetHvalue(item,hf,hi,hs):
   #
   key = string.lower(item) # convert the item to lower case
   #
-  if fdict.has_key(key):
+  if key in fdict:
     index = fdict[key]
     return(hf[index])
-  elif idict.has_key(key):
+  elif key in idict:
     index = idict[key]
     return(hi[index])
-  elif sdict.has_key(key):
+  elif key in sdict:
     index = sdict[key]
     length = 8
     #
@@ -184,15 +184,15 @@ def SetHvalue(item,value,hf,hi,hs):
   key = string.lower(item) # convert the item to lower case
   #
   ok = 0
-  if fdict.has_key(key):
+  if key in fdict:
     index = fdict[key]
     hf[index] = float(value)
     ok = 1
-  elif idict.has_key(key):
+  elif key in idict:
     index = idict[key]
     hi[index] = int(value)
     ok = 1
-  elif sdict.has_key(key):
+  elif key in sdict:
     index = sdict[key]
     vlen = len(value)
     if index == 0:
@@ -571,7 +571,7 @@ The "ok" value is one if no problems occurred, zero otherwise.\n"""
     f.close()
     ok = 1
   except:
-    print 'Error writing file ', ofname
+    print('Error writing file ', ofname)
     ok = 0
   return(ok)
 #
@@ -598,7 +598,7 @@ The "ok" value is one if no problems occurred, zero otherwise.\n"""
     f.close()
     ok = 1
   except:
-    print 'Error writing file ', ofname
+    print('Error writing file ', ofname)
     ok = 0
   return(ok)
 #
@@ -613,17 +613,17 @@ The "ok" value is one if no problems occurred, zero otherwise.\n"""
 def PrintIValue(label='=', value=-12345):
   """Convenience function for printing undefined integer header values"""
   if value != -12345:
-    print label, value
+    print(label, value)
 ###############################################################################
 def PrintFValue(label='=', value=-12345.0):
   """Convenience function for printing undefined float header values"""
   if value != -12345.0:
-    print '%s %.8g' % (label, value)
+    print('%s %.8g' % (label, value))
 ###############################################################################
 def PrintSValue(label='=', value='-12345'):
   """Convenience function for printing undefined string header values"""
   if value != '-12345':
-    print label, value
+    print(label, value)
 #
 ###############################################################################
 #
@@ -639,14 +639,14 @@ def ListStdValues(hf,hi,hs,seis): # h is a header list, s is a float list
   nzyear = GetHvalue('nzyear',hf,hi,hs)
   nzjday = GetHvalue('nzjday',hf,hi,hs)
   [month, date] = AM_subs.jday_to_month_day(nzyear, nzjday)
-  print '%s %2.2d/%2.2d/%d (%d) %d:%d:%d.%d' % ('\nReference Time = ',    \
+  print('%s %2.2d/%2.2d/%d (%d) %d:%d:%d.%d' % ('\nReference Time = ',    \
               month, date, \
                     GetHvalue('nzyear',hf,hi,hs), \
                                 GetHvalue('nzjday',hf,hi,hs), \
                                 GetHvalue('nzhour',hf,hi,hs), \
                                 GetHvalue('nzmin',hf,hi,hs),  \
                                 GetHvalue('nzsec',hf,hi,hs),  \
-                                GetHvalue('nzmsec',hf,hi,hs))
+                                GetHvalue('nzmsec',hf,hi,hs)))
   PrintIValue('Npts  = ',GetHvalue('npts',hf,hi,hs))
   PrintFValue('Delta = ',  GetHvalue('delta',hf,hi,hs)  )
   PrintFValue('Begin = ',  GetHvalue('b',hf,hi,hs)  )
@@ -692,14 +692,14 @@ def ListStdValues(hf,hi,hs): # h is a header list, s is a float list
   nzyear = GetHvalue('nzyear',hf,hi,hs)
   nzjday = GetHvalue('nzjday',hf,hi,hs)
   [month, date] = AM_subs.jday_to_month_day(nzyear, nzjday)
-  print '%s %2.2d/%2.2d/%d (%d) %d:%d:%d.%d' % ('\nReference Time = ',    \
+  print('%s %2.2d/%2.2d/%d (%d) %d:%d:%d.%d' % ('\nReference Time = ',    \
               month, date, \
                     GetHvalue('nzyear',hf,hi,hs), \
                                 GetHvalue('nzjday',hf,hi,hs), \
                                 GetHvalue('nzhour',hf,hi,hs), \
                                 GetHvalue('nzmin',hf,hi,hs),  \
                                 GetHvalue('nzsec',hf,hi,hs),  \
-                                GetHvalue('nzmsec',hf,hi,hs))
+                                GetHvalue('nzmsec',hf,hi,hs)))
   PrintIValue('Npts  = ',GetHvalue('npts',hf,hi,hs))
   PrintFValue('Delta = ',  GetHvalue('delta',hf,hi,hs)  )
   PrintFValue('Begin = ',  GetHvalue('b',hf,hi,hs)  )
@@ -745,7 +745,7 @@ returns -12345 if a problem occurred.\n"""
   if ok:
     return(GetHvalue(theItem,hf, hi, hs))
   else:
-    print "Problem in GetHvalueFromFile."
+    print("Problem in GetHvalueFromFile.")
     return(-12345)
 #
 ###############################################################################
@@ -771,7 +771,7 @@ The "ok" value is one if no problems occurred, zero otherwise.\n"""
         #
         #print 'Changed ',before,' to ',after,' in ',thePath
   else:
-    print "Problem in SetHvalueInFile."
+    print("Problem in SetHvalueInFile.")
   #
   return(ok)
 

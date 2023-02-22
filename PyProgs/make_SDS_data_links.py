@@ -39,7 +39,7 @@ def make_SDS_data_links(datadir, dataglob, outdir):
         else:
             filedict[dirid] = [filename]
 
-    for dirid, filelist in filedict.iteritems():
+    for dirid, filelist in filedict.items():
         net = dirid.split('.')[0]
         sta = dirid.split('.')[1]
         cha = dirid.split('.')[2]

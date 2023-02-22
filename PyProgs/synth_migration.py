@@ -16,9 +16,9 @@ def generateSyntheticDirac(opdict, time_grids=None):
 
     # Creates the synthetic dataset for us to work with
 
-    from NllGridLib import read_stations_file, read_hdr_file
-    from migration import migrate_4D_stack, extract_max_values
-    from hdf5_grids import get_interpolated_time_grids
+    from .NllGridLib import read_stations_file, read_hdr_file
+    from .migration import migrate_4D_stack, extract_max_values
+    from .hdf5_grids import get_interpolated_time_grids
 
     load_time_grids = False
     if time_grids is None:
@@ -55,7 +55,7 @@ def generateSyntheticDirac(opdict, time_grids=None):
     if 'sta_list' in opdict:
         sta_list = opdict['sta_list'].split(',')
     else:
-        sta_list = stations.keys()
+        sta_list = list(stations.keys())
 
     # get parameters for noise etc
     syn_addnoise = opdict['syn_addnoise']
@@ -107,7 +107,7 @@ def generateSyntheticDirac(opdict, time_grids=None):
 
     # construct data with these travel times
     data = {}
-    for key, delay in ttimes.iteritems():
+    for key, delay in ttimes.items():
         if syn_addnoise:
             s_snr = opdict['syn_snr']
             s = np.random.rand(s_npts)*s_amplitude/s_snr
@@ -132,7 +132,7 @@ def generateSyntheticDirac(opdict, time_grids=None):
     n_buf, nt = stack_grid.shape
 
     # add useful information to dataset
-    for key, value in grid_info.iteritems():
+    for key, value in grid_info.items():
         stack_grid.attrs[key] = value
     stack_grid.attrs['dt'] = s_delta
     stack_grid.attrs['start_time'] = -stack_shift_time

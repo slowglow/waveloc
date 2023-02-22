@@ -37,7 +37,7 @@ def CZ_Clust_2_color(dt):
 
     """
 
-    tt = range(0, 105, 5)
+    tt = list(range(0, 105, 5))
     liste = [dt-tt[i] for i in range(len(tt))]
     ind1 = np.where(np.abs(liste) == np.min(np.abs(liste)))[0]
     ind2 = ind1[0]
@@ -58,7 +58,7 @@ def CZ_W_2_color(dt):
 
     """
 
-    tt = range(1, 21, 1)
+    tt = list(range(1, 21, 1))
     liste = [dt-tt[i] for i in range(len(tt))]
     ind1 = np.where(np.abs(liste) == np.min(np.abs(liste)))[0]
     ind2 = ind1[0]

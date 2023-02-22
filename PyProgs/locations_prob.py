@@ -7,13 +7,13 @@ import glob
 import logging
 import numpy as np
 
-from locations_trigger import read_locs_from_file, \
+from .locations_trigger import read_locs_from_file, \
     do_locations_trigger_setup_and_run
-from NllGridLib import read_hdr_file
-from hdf5_grids import get_interpolated_time_grids
-from migration import do_migration_loop_continuous
-from OP_waveforms import read_data_compatible_with_time_dict
-from integrate4D import compute_expected_coordinates4D, \
+from .NllGridLib import read_hdr_file
+from .hdf5_grids import get_interpolated_time_grids
+from .migration import do_migration_loop_continuous
+from .OP_waveforms import read_data_compatible_with_time_dict
+from .integrate4D import compute_expected_coordinates4D, \
     compute_expected_coordinates3D
 
 

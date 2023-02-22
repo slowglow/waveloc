@@ -43,7 +43,7 @@ def displacement_to_strain(x1,x0,x2,xs,seis1,seis0,seis2):
 
 
   except ZeroDivisionError:
-    print "Bad geometry, x1,x0,x2 = %f %f %f"%(x1,x0,x2)
+    print("Bad geometry, x1,x0,x2 = %f %f %f"%(x1,x0,x2))
 
   for i in range(npts):
     out_disp.u_t[i]   = c1*seis1.u_t[i] + c0*seis0.u_t[i] + c2*seis2.u_t[i]

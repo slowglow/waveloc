@@ -95,14 +95,14 @@ def Fast_Kurtogram(x, nlevel,options_verbose, Fs=1, opt1=None, opt2=None):
           fig = plt.figure()
           fig.set_facecolor('white')
           #~ plt.subplot(ratio='auto')
-          plt.imshow(Kwav,aspect='auto',extent=(0,freq_w[-1],range(2*nlevel)[-1],range(2*nlevel)[0]),interpolation='bilinear')
+          plt.imshow(Kwav,aspect='auto',extent=(0,freq_w[-1],list(range(2*nlevel))[-1],list(range(2*nlevel))[0]),interpolation='bilinear')
           xx=np.arange(0,int(freq_w[len(freq_w)-1]),step=5)
           plt.xticks(xx)
-          plt.yticks(range(2*nlevel),np.round(Level_w*10)/10)
+          plt.yticks(list(range(2*nlevel)),np.round(Level_w*10)/10)
           #plt.plot(Fs*fi,I,'yo')
           plt.xlabel("Frequency (Hz)")
           plt.ylabel("Level k")
-          print freq_w[-1]
+          print(freq_w[-1])
           if opt2==1:
             plt.title("Level %.1f, Bw=%.2f Hz, fc=%.2f Hz"%(np.round(10*Level_w[I])/10,Fs*2**(-(Level_w[I]+1)),Fs*fi))
             #plt.title("fb-kurt.2 - Kmax=%.1f, level %.1f, Bw=%.2f Hz, fc=%.2f Hz"%(np.round(10*M)/10,np.round(10*Level_w[I])/10,Fs*2**(-(Level_w[I]+1)),Fs*fi))
@@ -579,7 +579,7 @@ if __name__=='__main__':
 
   for sta_line in sta_lines:
     sta=sta_line.split()[1]
-    print "##############", sta, "##############"
+    print("##############", sta, "##############")
 
     filepath="%s/*%s%s"%(data_dir,sta,options.data_glob)
     kurtpath="%s/*%s%s"%(data_dir,sta,options.kurt_glob)
@@ -624,4 +624,4 @@ if __name__=='__main__':
     wf.values[:]=a
     wf.write_to_file_filled(new_file,format='SAC')
 
-  print "temps de calcul:",time.time()-tref
+  print("temps de calcul:",time.time()-tref)

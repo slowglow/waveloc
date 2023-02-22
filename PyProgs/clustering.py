@@ -9,12 +9,12 @@ import os
 import glob
 import matplotlib.pyplot as plt
 import numpy as np
-from CZ_color import CZ_Clust_2_color, CZ_W_2_color
-from OP_waveforms import Waveform
+from .CZ_color import CZ_Clust_2_color, CZ_W_2_color
+from .OP_waveforms import Waveform
 import logging
-from correlation import BinaryFile
-from locations_trigger import read_locs_from_file
-from NllGridLib import read_stations_file
+from .correlation import BinaryFile
+from .locations_trigger import read_locs_from_file
+from .NllGridLib import read_stations_file
 
 
 class Graph(object):
@@ -228,11 +228,11 @@ def compute_nbsta(event, coeff, threshold):
     """
 
     nbsta = []
-    for i in xrange(event):
+    for i in range(event):
         liste = []
-        for k in xrange(i):
+        for k in range(i):
             liste.append(0)
-        for j in xrange(i, event):
+        for j in range(i, event):
             c = 0
             if i != j:
                 for name in sorted(coeff):
@@ -316,7 +316,7 @@ def do_clustering(event, nbsta, nbmin):
         ind_summit_first = 0
         cluster_ind = 0
         CLUSTER = {}
-        while 1:
+        while True:
             event_index_flagged = []
             event_index_non_flagged_with_neighbours = []
             ind_summit_first = ind_summit_first+1
@@ -419,7 +419,7 @@ def plot_graphs(locs, stations, nbsta, CLUSTER, nbmin, threshold):
                   color=(0.8, 0.8, 0.8))
     mlab.title("threshold=%s,  nbmin=%s" % (threshold, nbmin), height=0.1,
                size=0.35, color=(0, 0, 0))
-    print nbsta
+    print(nbsta)
     for ind_I in range(len(nbsta)):
         for ind_J in range(ind_I+1, len(nbsta)):
             W_IJ = nbsta[ind_I, ind_J]
@@ -476,10 +476,10 @@ def do_clustering_setup_and_run(opdict):
 
     # INPUT PARAMETERS
     nbmin = int(opdict['nbsta'])
-    if nbmin > len(coeff.keys()):
+    if nbmin > len(list(coeff.keys())):
         raise Exception('the minimum number of stations cannot be > to the\
                          number of stations !!')
-    event = len(coeff.values()[0])
+    event = len(list(coeff.values())[0])
     tplot = float(opdict['clus'])  # threshold for which we save and plot
     cluster_file = "%s/cluster-%s-%s" % (locdir, str(tplot), str(nbmin))
 
@@ -493,14 +493,14 @@ def do_clustering_setup_and_run(opdict):
 
         if threshold == tplot:
 
-            print "----------------------------------------------"
-            print "THRESHOLD : ", threshold, " # STATIONS : ", nbmin
-            print "# CLUSTERS : ", len(CLUSTER)
-            print CLUSTER
+            print("----------------------------------------------")
+            print("THRESHOLD : ", threshold, " # STATIONS : ", nbmin)
+            print("# CLUSTERS : ", len(CLUSTER))
+            print(CLUSTER)
 
             c = BinaryFile(cluster_file)
             c.write_binary_file(CLUSTER)
-            print "Written in %s" % cluster_file
+            print("Written in %s" % cluster_file)
 
             if verbose:  # PLOT
                 # Read location file
