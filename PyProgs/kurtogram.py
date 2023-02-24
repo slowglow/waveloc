@@ -57,7 +57,7 @@ def get_h_parameters(NFIR, fcut):
 
     h = si.firwin(NFIR+1, fcut) * np.exp(2*1j*np.pi*np.arange(NFIR+1) * 0.125)
     n = np.arange(2, NFIR+2)
-    g = h[(1-n) % NFIR]*(-1)**(1-n)
+    g = h[(1-n) % NFIR]*(-1.0)**(1.0-n)
     NFIR = int(np.fix((3./2.*NFIR)))
     h1 = si.firwin(NFIR+1, 2./3*fcut)*np.exp(2j*np.pi*np.arange(NFIR+1) *
                                              0.25/3.)
@@ -90,16 +90,16 @@ def plotKurtogram(Kwav, freq_w, nlevel, Level_w, Fs, fi, I):
     plt.imshow(Kwav, aspect='auto', extent=(0, freq_w[-1], list(range(2*nlevel))[-1],
                                             list(range(2*nlevel))[0]),
                interpolation='none', cmap=plt.cm.hot_r)
-    #imgplot.set_cmap('gray')
+    # imgplot.set_cmap('gray')
     xx = np.arange(0, int(freq_w[len(freq_w)-1]), step=5)
     plt.xticks(xx)
     plt.yticks(list(range(2*nlevel)), np.round(Level_w*10)/10)
-    plt.plot(Fs*fi,I,'yo')
+    plt.plot(Fs*fi, I, 'yo')
     plt.xlabel("Frequency (Hz)")
     plt.ylabel("Level k")
     #plt.figtext(0.075, 0.90, "(a)", fontsize=15)
     plt.title("Level %.1f, Bw=%.2f Hz, fc=%.2f Hz" %
-                  (np.round(10*Level_w[I])/10, Fs*2**(-(Level_w[I]+1)), Fs*fi))
+              (np.round(10*Level_w[I])/10, Fs*2**(-(Level_w[I]+1)), Fs*fi))
     plt.colorbar()
     plt.show()
 
@@ -222,9 +222,9 @@ def Fast_Kurtogram(x, nlevel, verbose=False, Fs=1, NFIR=16, fcut=0.4,
 
         h, g, h1, h2, h3 = get_h_parameters(NFIR, fcut)
 
-        if opt2 == 1: # kurtosis of the complex envelope
+        if opt2 == 1:  # kurtosis of the complex envelope
             Kwav = K_wpQ(x, h, g, h1, h2, h3, nlevel, verbose, 'kurt2')
-        else: # variance of the envelope magnitude
+        else:  # variance of the envelope magnitude
             Kwav = K_wpQ(x, h, g, h1, h2, h3, nlevel, verbose, 'kurt1')
 
         # keep positive values only!
@@ -359,7 +359,7 @@ def K_wpQ_local(x, h, g, h1, h2, h3, nlevel, verbose, opt, level):
     a, d = DBFB(x, h, g)
 
     N = len(a)
-    d = d*np.power(-1., np.arange(1, N+1)) # indices pairs multipliés par -1
+    d = d*np.power(-1., np.arange(1, N+1))  # indices pairs multipliés par -1
     K1 = kurt(a[len(h)-1:], opt)
     K2 = kurt(d[len(g)-1:], opt)
 
@@ -625,7 +625,7 @@ def getFTSquaredEnvelope(c):
     nfft = int(nextpow2(len(c)))
     env = np.abs(c)**2
     S = np.abs(np.fft.fft((env.ravel()-np.mean(env)) *
-               np.hanning(len(env))/len(env), nfft))
+                          np.hanning(len(env))/len(env), nfft))
     return S
 
 
@@ -668,7 +668,7 @@ def plot_envelope(x, Fs, c, fc, level, spec=False):
         nfft = int(nextpow2(len(c)))
         env = np.abs(c)**2
         S = np.abs(np.fft.fft(env.ravel()-np.mean(env) *
-                   np.hanning(len(env))/len(env), nfft))
+                              np.hanning(len(env))/len(env), nfft))
         f = np.linspace(0, 0.5*Fs/2**level, nfft/2)
         plt.subplot(313)
         plt.plot(f, S[:nfft/2], 'k')
@@ -1005,7 +1005,7 @@ def kurto(origin_time, info, opdict):
 
     snr_ref = np.max(np.abs(x))/np.mean(np.abs(x))
     snr_kurt_ref = np.max(np.abs(kurtx))/np.mean(np.abs(kurtx))
-    kmax_ref = np.max(kurtx) # maximum of the kurtosis
+    kmax_ref = np.max(kurtx)  # maximum of the kurtosis
 
     # Compute the kurtogram and keep best frequencies
     if verbose:
@@ -1054,8 +1054,8 @@ def kurto(origin_time, info, opdict):
 
     if verbose and snr > 3:
         print("snr:", snr, " ; snr_ref:", snr_ref)
-        print("snr new kurtosis:", snr_kurt, " ; snr kurtosis reference:",\
-            snr_kurt_ref)
+        print("snr new kurtosis:", snr_kurt, " ; snr kurtosis reference:",
+              snr_kurt_ref)
         print("kurtosis max, kurt_ref :", kmax, kmax_ref)
         plot_trace(fig, G, x, x_filt, kurtx, new_kurtx, info, f_lower,
                    f_upper, snr, snr_ref, snr_kurt, kmax, kmax_ref,
