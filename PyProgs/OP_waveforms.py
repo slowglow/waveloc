@@ -26,8 +26,8 @@ import matplotlib.pyplot as plt
 from .filters import sw_kurtosis1, smooth, rec_kurtosis_old
 
 from obspy.core import read, utcdatetime, stream, Stream
-from obspy.signal import cosTaper, filter, trigger
-
+from obspy.signal import filter, trigger
+from obspy.signal.invsim import cosine_taper
 
 class Waveform(object):
     """
@@ -903,7 +903,8 @@ def stream_taper(st):
     """
     for tr in st:
         try:
-            mytaper = cosTaper(tr.stats.npts)
+            # mytaper = cosTaper(tr.stats.npts) # BS
+            mytaper = invsim.cosine_taper(tr.stats.npts) # BS
             t_tr = mytaper*(tr.data)
         except ValueError:
             logging.warn('Trace is too short for tapering - multiplying by 0\
